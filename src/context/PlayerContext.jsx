@@ -30,6 +30,43 @@ export const useProgress = () => useContext(ProgressCtx);
 const MAX_RECENT = 16;
 const RESUME_AFTER = 10; // seconds
 
+/* ─────────────────────────────────────────────────────────────
+   ONE player for the whole app, held at module scope.
+
+   Why this exists — the crash we were hitting:
+
+   The YouTube IFrame API does not render *into* the element you
+   give it, it REPLACES that element with an <iframe>. When that
+   element was one React had rendered, React kept a reference to a
+   node that no longer existed. The next time React reconciled
+   (a route change, a toast, the name gate opening) it tried to
+   insert or remove a sibling relative to the vanished node and
+   the browser threw:
+     · Failed to execute 'insertBefore' on 'Node'
+     · Failed to execute 'removeChild' on 'Node'
+   A stale iframe also explains the other two: messages sent to a
+   replaced frame give "target origin does not match", and calling
+   a method on a destroyed player gives "n is not a function".
+
+   The rules that keep this safe:
+   1. React renders an EMPTY container and never puts children in
+      it. The real host node is created imperatively below, and
+      that — not the React node — is what YouTube is handed.
+      React therefore never owns, moves or removes the iframe.
+   2. The instance lives here, not in a ref, so StrictMode's
+      double-invoked effects and any remount REUSE it instead of
+      stacking a second player on top of the first.
+   3. It is destroyed only on pagehide, never in an effect
+      cleanup, so route changes cannot tear it down.
+   ───────────────────────────────────────────────────────────── */
+const playerSingleton = {
+  container: null, // React-owned empty div
+  host: null, // imperative div we actually give to YouTube
+  player: null, // the YT.Player instance
+  ready: false,
+  destroyed: false,
+};
+
 export function PlayerProvider({ children }) {
   /* ── persisted bits ─────────────────────────────────────── */
   const [favorites, setFavorites] = useState(() => new Set(read(KEYS.favorites, [])));
@@ -54,7 +91,7 @@ export function PlayerProvider({ children }) {
 
   /* ── refs ───────────────────────────────────────────────── */
   const playerRef = useRef(null);
-  const hostRef = useRef(null);
+  const containerRef = useRef(null); // React-owned, always empty
   const apiRef = useRef(null);
   const readyRef = useRef(false);
   const pendingRef = useRef(null); // { videoId, startSeconds, autoplay }
@@ -74,12 +111,24 @@ export function PlayerProvider({ children }) {
   progressRef.current = progress;
 
   /* ── persistence ────────────────────────────────────────── */
-  useEffect(() => write(KEYS.favorites, [...favorites]), [favorites]);
-  useEffect(() => write(KEYS.savedPlaylists, [...savedPlaylists]), [savedPlaylists]);
-  useEffect(() => write(KEYS.favoriteArtists, [...favoriteArtists]), [favoriteArtists]);
-  useEffect(() => write(KEYS.recent, recent), [recent]);
-  useEffect(() => write(KEYS.mood, mood), [mood]);
-  useEffect(() => write(KEYS.volume, volume), [volume]);
+  useEffect(() => {
+    write(KEYS.favorites, [...favorites]);
+  }, [favorites]);
+  useEffect(() => {
+    write(KEYS.savedPlaylists, [...savedPlaylists]);
+  }, [savedPlaylists]);
+  useEffect(() => {
+    write(KEYS.favoriteArtists, [...favoriteArtists]);
+  }, [favoriteArtists]);
+  useEffect(() => {
+    write(KEYS.recent, recent);
+  }, [recent]);
+  useEffect(() => {
+    write(KEYS.mood, mood);
+  }, [mood]);
+  useEffect(() => {
+    write(KEYS.volume, volume);
+  }, [volume]);
 
   /* ── toast ──────────────────────────────────────────────── */
   const toastTimer = useRef(null);
@@ -89,28 +138,47 @@ export function PlayerProvider({ children }) {
     toastTimer.current = setTimeout(() => setToast(null), 2800);
   }, []);
 
+  /* Single choke point for every call into the embed. A stale or
+     half-built player used to surface as "n is not a function";
+     now it just quietly returns undefined. */
+  const callPlayer = useCallback((method, ...args) => {
+    const p = playerRef.current;
+    if (!p || playerSingleton.destroyed) return undefined;
+    try {
+      const fn = p[method];
+      if (typeof fn !== 'function') return undefined;
+      return fn.apply(p, args);
+    } catch {
+      /* the embed may have been torn down mid-call */
+      return undefined;
+    }
+  }, []);
+
   /* ── the fix: never drop a play request ─────────────────────
      The IFrame API loads asynchronously. If a tap arrives before
      the player exists we park the request in pendingRef and fire
      it from onReady — previously it was silently discarded.    */
-  const sendToPlayer = useCallback((req) => {
-    const p = playerRef.current;
-    if (!readyRef.current || !p || typeof p.loadVideoById !== 'function') {
-      pendingRef.current = req;
-      return false;
-    }
-    try {
-      if (req.autoplay) {
-        p.loadVideoById({ videoId: req.videoId, startSeconds: req.startSeconds || 0 });
-      } else {
-        p.cueVideoById({ videoId: req.videoId, startSeconds: req.startSeconds || 0 });
+  const sendToPlayer = useCallback(
+    (req) => {
+      const p = playerRef.current;
+      if (!readyRef.current || !p || typeof p.loadVideoById !== 'function') {
+        pendingRef.current = req;
+        return false;
       }
-      return true;
-    } catch {
-      pendingRef.current = req;
-      return false;
-    }
-  }, []);
+      try {
+        if (req.autoplay) {
+          p.loadVideoById({ videoId: req.videoId, startSeconds: req.startSeconds || 0 });
+        } else {
+          p.cueVideoById({ videoId: req.videoId, startSeconds: req.startSeconds || 0 });
+        }
+        return true;
+      } catch {
+        pendingRef.current = req;
+        return false;
+      }
+    },
+    [],
+  );
 
   const flushPending = useCallback(() => {
     const req = pendingRef.current;
@@ -187,8 +255,8 @@ export function PlayerProvider({ children }) {
       if (!q.length) return;
 
       if (repeatRef.current === 'one' && !userSkipped) {
-        playerRef.current?.seekTo?.(0, true);
-        playerRef.current?.playVideo?.();
+        callPlayer('seekTo', 0, true);
+        callPlayer('playVideo');
         wantPlayRef.current = true;
         return;
       }
@@ -211,7 +279,7 @@ export function PlayerProvider({ children }) {
         wantPlayRef.current = false;
         setProgress((p) => ({ ...p, currentTime: 0 }));
         try {
-          playerRef.current?.stopVideo?.();
+          callPlayer('stopVideo');
         } catch {
           /* already stopped */
         }
@@ -219,17 +287,17 @@ export function PlayerProvider({ children }) {
       }
       loadIndex(i, auto);
     },
-    [loadIndex],
+    [callPlayer, loadIndex],
   );
 
   const prev = useCallback(() => {
     if (progressRef.current.currentTime > 3) {
-      playerRef.current?.seekTo?.(0, true);
+      callPlayer('seekTo', 0, true);
       setProgress((p) => ({ ...p, currentTime: 0 }));
       return;
     }
     loadIndex(indexRef.current - 1, true);
-  }, [loadIndex]);
+  }, [callPlayer, loadIndex]);
 
   /* ── boot the IFrame API once ───────────────────────────── */
   useEffect(() => {
@@ -258,9 +326,40 @@ export function PlayerProvider({ children }) {
       }, 250);
     };
 
+    const container = containerRef.current;
+    if (!container) return undefined;
+
+    /* Already built? StrictMode double-invokes effects in dev, and
+       any remount would hit this too. Adopt the existing instance
+       instead of building a second player over the same node — two
+       players fighting over one iframe is exactly what produced the
+       "target origin does not match" postMessage error. */
+    if (playerSingleton.player && !playerSingleton.destroyed) {
+      if (playerSingleton.host && !playerSingleton.host.isConnected) {
+        container.appendChild(playerSingleton.host);
+      }
+      playerRef.current = playerSingleton.player;
+      apiRef.current = window.YT || apiRef.current;
+      readyRef.current = playerSingleton.ready;
+      if (readyRef.current) flushPending();
+      return () => {
+        cancelled = true;
+        if (ticker) clearInterval(ticker);
+      };
+    }
+
+    /* The node YouTube is allowed to replace.
+       Created here — NOT rendered by React — so React never owns,
+       moves or removes it. React's tree says the container is
+       empty and it stays empty as far as React is concerned. */
+    const host = document.createElement('div');
+    host.style.cssText = 'width:200px;height:120px;';
+    container.appendChild(host);
+    playerSingleton.host = host;
+
     loadYouTubeApi()
       .then((YT) => {
-        if (cancelled || !hostRef.current) return;
+        if (cancelled || !host.isConnected) return;
         apiRef.current = YT;
 
         const origin = window.location?.origin;
@@ -273,6 +372,7 @@ export function PlayerProvider({ children }) {
           playsinline: 1,
           fs: 0,
           iv_load_policy: 3,
+          enablejsapi: 1,
         };
         // Only send `origin` when it is a real http(s) origin — a
         // wrong value makes YouTube refuse to start the video.
@@ -280,13 +380,14 @@ export function PlayerProvider({ children }) {
           playerVars.origin = origin;
         }
 
-        playerRef.current = new YT.Player(hostRef.current, {
+        playerSingleton.player = new YT.Player(host, {
           width: 200,
           height: 120,
           playerVars,
           events: {
             onReady: (e) => {
               readyRef.current = true;
+              playerSingleton.ready = true;
               try {
                 e.target.setVolume(volume);
                 if (muted) e.target.mute();
@@ -336,6 +437,8 @@ export function PlayerProvider({ children }) {
             },
           },
         });
+        playerRef.current = playerSingleton.player;
+        playerSingleton.destroyed = false;
       })
       .catch(() => {
         if (!cancelled) {
@@ -344,31 +447,55 @@ export function PlayerProvider({ children }) {
         }
       });
 
+    /* Deliberately does NOT destroy the player.
+       This is a persistent, app-level player mounted once above the
+       router. It has to survive route changes, and StrictMode runs
+       this cleanup once for free in development. Destroying here is
+       what used to leave React holding a node the API had already
+       replaced. Real teardown only happens on pagehide, below. */
     return () => {
       cancelled = true;
-      readyRef.current = false;
       clearTimeout(watchdogRef.current);
       if (ticker) clearInterval(ticker);
-      try {
-        playerRef.current?.destroy?.();
-      } catch {
-        /* teardown is best-effort */
-      }
-      playerRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flushPending]);
+
+  /* The only place the embed is ever destroyed: the page really is
+     going away. Nothing else in the app tears it down. */
+  useEffect(() => {
+    const teardown = () => {
+      if (playerSingleton.destroyed) return;
+      playerSingleton.destroyed = true;
+      playerSingleton.ready = false;
+      readyRef.current = false;
+      playerRef.current = null;
+      try {
+        playerSingleton.player?.destroy?.();
+      } catch {
+        /* best-effort */
+      }
+      try {
+        playerSingleton.host?.remove?.();
+      } catch {
+        /* best-effort */
+      }
+      playerSingleton.player = null;
+      playerSingleton.host = null;
+    };
+    window.addEventListener('pagehide', teardown);
+    return () => window.removeEventListener('pagehide', teardown);
   }, []);
 
   /* keep embed volume in sync */
   useEffect(() => {
     if (!readyRef.current) return;
     try {
-      playerRef.current?.setVolume?.(muted ? 0 : volume);
-      playerRef.current?.[muted ? 'mute' : 'unMute']?.();
+      callPlayer('setVolume', muted ? 0 : volume);
+      callPlayer(muted ? 'mute' : 'unMute');
     } catch {
       /* not ready */
     }
-  }, [volume, muted]);
+  }, [volume, muted, callPlayer]);
 
   /* ── actions ────────────────────────────────────────────── */
   const playSong = useCallback(
@@ -380,9 +507,8 @@ export function PlayerProvider({ children }) {
       if (ids.join('|') === queueRef.current.join('|')) {
         if (at === indexRef.current) {
           wantPlayRef.current = true;
-          const p = playerRef.current;
-          if (readyRef.current && p?.playVideo) {
-            p.playVideo();
+          if (readyRef.current) {
+            callPlayer('playVideo');
             armWatchdog();
           } else {
             pendingRef.current = {
@@ -402,7 +528,7 @@ export function PlayerProvider({ children }) {
       indexRef.current = -1;
       requestAnimationFrame(() => loadIndex(at, true));
     },
-    [loadIndex, armWatchdog],
+    [callPlayer, loadIndex, armWatchdog],
   );
 
   const playQueue = useCallback(
@@ -442,12 +568,12 @@ export function PlayerProvider({ children }) {
     const YTapi = apiRef.current;
     if (st === YTapi?.PlayerState.PLAYING) {
       wantPlayRef.current = false;
-      p.pauseVideo();
+      callPlayer('pauseVideo');
     } else {
-      p.playVideo();
+      callPlayer('playVideo');
       armWatchdog();
     }
-  }, [armWatchdog, notify]);
+  }, [armWatchdog, notify, callPlayer]);
 
   /** Force a fresh start — used when a video stalls or errors. */
   const retry = useCallback(() => {
@@ -460,10 +586,13 @@ export function PlayerProvider({ children }) {
     armWatchdog();
   }, [sendToPlayer, armWatchdog]);
 
-  const seekTo = useCallback((seconds) => {
-    playerRef.current?.seekTo?.(seconds, true);
-    setProgress((p) => ({ ...p, currentTime: seconds }));
-  }, []);
+  const seekTo = useCallback(
+    (seconds) => {
+      callPlayer('seekTo', seconds, true);
+      setProgress((p) => ({ ...p, currentTime: seconds }));
+    },
+    [callPlayer],
+  );
 
   const setVolume = useCallback((v) => {
     const clamped = Math.min(100, Math.max(0, Math.round(v)));
@@ -738,9 +867,18 @@ export function PlayerProvider({ children }) {
       <StateCtx.Provider value={state}>
         <ProgressCtx.Provider value={progress}>
           {children}
-          {/* Hidden host for the official YouTube embed — audio only,
-              driven entirely by our own UI. */}
-          <div ref={hostRef} className="player-host" aria-hidden="true" title="YouTube audio player" />
+          {/* Empty container for the official YouTube embed.
+              React renders this with NO children and must never put
+              any here. PlayerProvider creates the real host node
+              imperatively and hands *that* to the IFrame API, which
+              replaces it with an <iframe>. Keeping React's hands off
+              it is what stops the insertBefore/removeChild crashes. */}
+          <div
+            ref={containerRef}
+            className="player-host"
+            aria-hidden="true"
+            title="YouTube audio player"
+          />
         </ProgressCtx.Provider>
       </StateCtx.Provider>
     </ActionsCtx.Provider>
