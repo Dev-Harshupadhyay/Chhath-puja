@@ -8,6 +8,7 @@ import StickyPlayer from '../player/StickyPlayer';
 import ExpandedPlayer from '../player/ExpandedPlayer';
 import Lightbox from '../common/Lightbox';
 import NameGate from '../common/NameGate';
+import DeveloperProfile from '../developer/DeveloperProfile';
 import { usePlayer } from '../../context/PlayerContext';
 
 export default function Layout() {
@@ -46,6 +47,7 @@ export default function Layout() {
       <ExpandedPlayer />
       <Lightbox />
       <NameGate />
+      <DeveloperProfile />
       <Toast />
     </>
   );

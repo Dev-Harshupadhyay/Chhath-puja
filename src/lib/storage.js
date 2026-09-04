@@ -33,4 +33,5 @@ export const KEYS = {
   progress: 'progress',
   name: 'name',
   nameSkipped: 'name-skipped',
+  language: 'language',
 };

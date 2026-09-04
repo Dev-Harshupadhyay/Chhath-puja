@@ -1,0 +1,509 @@
+/* ═══════════════════════════════════════════════════════════
+   Chhath Geet — premium surfaces
+   Language control, creator signature and the developer
+   profile dialog. Every colour here resolves to a token from
+   tokens.css; no local hex values.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Language segmented control ─────────────────────────────
+   English | हिंदी | भोजपुरी
+   Active chip is solid gold with dark ink, inactive chips are
+   glass — obvious at a glance, never louder than the music UI. */
+.langswitch {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.langswitch__chip {
+  min-height: 44px; /* generous target — these are thumb controls */
+  padding: 0 var(--s-3);
+  border: 0;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.langswitch__chip:hover {
+  color: var(--text);
+}
+
+.langswitch__chip.is-active {
+  background: var(--grad-brand);
+  color: var(--ink);
+  box-shadow: var(--shadow-glow);
+}
+
+.langswitch__chip:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+/* ── Creator signature ──────────────────────────────────────
+   Shared by the footer credits and the developer profile, so
+   the two can never drift into competing identities. */
+.signature {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
+}
+
+.signature__line {
+  font-size: var(--fs-xs);
+  color: var(--text-faint);
+}
+
+.signature__by {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* "HARSH" — bold, letter-spaced, gold gradient, slow shimmer. */
+.signature__name,
+.footer__made b.signature__name {
+  margin-left: 2px;
+  font-weight: 800;
+  font-size: var(--fs-sm);
+  letter-spacing: 0.18em;
+  background-image: linear-gradient(
+    100deg,
+    var(--gold) 0%,
+    var(--accent-soft) 34%,
+    var(--gold) 50%,
+    var(--accent) 68%,
+    var(--gold) 100%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: sig-shimmer 6s linear infinite;
+}
+
+@keyframes sig-shimmer {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 200% 50%;
+  }
+}
+
+/* In the footer the signature sits with the other credits. */
+.footer__made .signature {
+  justify-items: start;
+  text-align: left;
+}
+
+/* ── Nav / More-menu entries ─────────────────────────────── */
+.nav__link--dev {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+
+.nav__link--dev:hover {
+  color: var(--text);
+}
+
+.nav__link--dev:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.menu__divider {
+  height: 1px;
+  margin: var(--s-1) var(--s-2);
+  border: 0;
+  background: var(--border);
+}
+
+.menu__dev {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  color: var(--text-muted);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+
+.menu__dev:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* ── Developer profile dialog ─────────────────────────────── */
+.devprofile {
+  position: fixed;
+  inset: 0;
+  z-index: 195; /* above the player and the name gate, below the lightbox */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.devprofile__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 14, 0.74);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: dev-fade var(--dur) var(--ease);
+}
+
+.devprofile__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 92vh;
+  overflow: hidden;
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  border: 1px solid var(--border-strong);
+  border-bottom: 0;
+  background:
+    radial-gradient(120% 70% at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 62%),
+    linear-gradient(180deg, var(--surface-solid-2), var(--bg-deep));
+  box-shadow: var(--shadow-xl);
+  animation: dev-sheet-in var(--dur-slow) var(--ease);
+}
+
+.devprofile__grip {
+  flex: none;
+  width: 44px;
+  height: 4px;
+  margin: 10px auto 0;
+  border-radius: var(--r-pill);
+  background: var(--border-strong);
+}
+
+.devprofile__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+.devprofile__close:hover {
+  background: var(--surface-3);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+
+.devprofile__close:focus-visible {
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+
+.devprofile__head {
+  flex: none;
+  padding: var(--s-5) var(--s-5) var(--s-4);
+  text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.devprofile__avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 92px;
+  height: 92px;
+  margin: 0 auto var(--s-4);
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--grad-brand);
+  box-shadow: var(--shadow-gold);
+}
+
+/* Inner navy disc, so the monogram sits on dark. */
+.devprofile__avatar::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: radial-gradient(120% 120% at 50% 0%, #1b2440 0%, var(--bg-deep) 72%);
+}
+
+/* Slow sheen across the gold ring. */
+.devprofile__avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  background: linear-gradient(
+    115deg,
+    transparent 38%,
+    rgba(255, 255, 255, 0.4) 50%,
+    transparent 62%
+  );
+  opacity: 0.45;
+  animation: dev-shine 5.5s var(--ease-in-out) infinite;
+}
+
+.devprofile__monogram {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1;
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.devprofile__name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.14em;
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 6px 26px rgba(212, 175, 55, 0.28));
+}
+
+.devprofile__role {
+  margin: var(--s-2) 0 0;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.devprofile__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: var(--s-5);
+  display: grid;
+  gap: var(--s-4);
+}
+
+.devprofile__lead {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.devprofile__text {
+  margin: 0;
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ── Fact blocks ──────────────────────────────────────────── */
+.devprofile__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--s-3);
+}
+
+.devfact {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--s-3);
+  align-items: center;
+  padding: var(--s-3) var(--s-4);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.devfact__icon {
+  grid-row: span 2;
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.devfact__label {
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.devfact__value {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* ── Message ──────────────────────────────────────────────── */
+.devprofile__quote {
+  margin: 0;
+  padding: var(--s-5);
+  text-align: center;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 65%),
+    var(--surface);
+}
+
+.devprofile__quote-text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--fs-h4);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.devprofile__jai {
+  margin-top: var(--s-3);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  background: var(--grad-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 18px rgba(212, 175, 55, 0.3));
+}
+
+.devprofile__lang {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding-top: var(--s-2);
+}
+
+.devprofile__lang-label {
+  font-size: var(--fs-2xs);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.devprofile__foot {
+  flex: none;
+  padding: var(--s-4) var(--s-5) calc(var(--s-5) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--border-subtle);
+  background: rgba(8, 12, 24, 0.5);
+}
+
+/* ── Desktop: a centred dialog instead of a sheet ─────────── */
+@media (min-width: 640px) {
+  .devprofile {
+    align-items: center;
+    padding: var(--s-6);
+  }
+
+  .devprofile__card {
+    max-width: 560px;
+    max-height: min(86vh, 880px);
+    border-radius: var(--r-xl);
+    border-bottom: 1px solid var(--border-strong);
+    animation: dev-dialog-in var(--dur-slow) var(--ease);
+  }
+
+  .devprofile__grip {
+    display: none;
+  }
+
+  .devprofile__head {
+    padding-top: var(--s-6);
+  }
+}
+
+/* ── Keyframes ────────────────────────────────────────────── */
+@keyframes dev-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dev-sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes dev-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dev-shine {
+  0%,
+  100% {
+    transform: translateX(-130%);
+  }
+  55%,
+  75% {
+    transform: translateX(130%);
+  }
+}
+
+/* The global prefers-reduced-motion block in tokens.css already
+   collapses every duration; this additionally stops the two
+   looping effects outright so nothing keeps moving on screen. */
+@media (prefers-reduced-motion: reduce) {
+  .devprofile__avatar::before,
+  .signature__name {
+    animation: none !important;
+  }
+}

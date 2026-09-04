@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Icon from '../Icon';
+import CreatorSignature from '../common/CreatorSignature';
 
 const COLS = [
   {
@@ -53,7 +54,7 @@ export default function Footer() {
             <span className="deva">सभी गीत आधिकारिक YouTube स्रोतों के माध्यम से चलाए जाते हैं।</span>
           </span>
           <span className="footer__made">
-            Made with <span aria-label="love">❤️</span> for Chhath Puja · Made by <b>Harsh</b>
+            <CreatorSignature />
           </span>
         </div>
       </div>

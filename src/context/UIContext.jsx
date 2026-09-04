@@ -7,6 +7,7 @@ export function UIProvider({ children }) {
   const [expandedOpen, setExpandedOpen] = useState(false);
   const [queueOpen, setQueueOpen] = useState(false);
   const [lightbox, setLightbox] = useState(null);
+  const [developerOpen, setDeveloperOpen] = useState(false);
 
   const value = useMemo(
     () => ({
@@ -20,8 +21,11 @@ export function UIProvider({ children }) {
       lightbox,
       openLightbox: (item, list = []) => setLightbox({ item, list }),
       closeLightbox: () => setLightbox(null),
+      developerOpen,
+      openDeveloper: () => setDeveloperOpen(true),
+      closeDeveloper: () => setDeveloperOpen(false),
     }),
-    [expandedOpen, queueOpen, lightbox],
+    [expandedOpen, queueOpen, lightbox, developerOpen],
   );
 
   return <UICtx.Provider value={value}>{children}</UICtx.Provider>;

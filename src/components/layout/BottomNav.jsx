@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Icon from '../Icon';
+import { useUI } from '../../context/UIContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const ITEMS = [
   { to: '/', icon: 'home', label: 'Home', end: true },
@@ -18,6 +20,21 @@ const MORE = [
 /** Mobile-only tab bar. The player sits directly above it. */
 export default function BottomNav() {
   const [moreOpen, setMoreOpen] = useState(false);
+  const { openDeveloper } = useUI();
+  const { t } = useLanguage();
+
+  /* "More" rows share one shape so the creator item reads as a
+     quiet credit rather than competing with the music tabs. */
+  const rowStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    minHeight: 48,
+    padding: '0 12px',
+    borderRadius: 10,
+    fontWeight: 600,
+    fontSize: '0.9rem',
+  };
 
   return (
     <>
@@ -47,11 +64,26 @@ export default function BottomNav() {
                 to={m.to}
                 onClick={() => setMoreOpen(false)}
                 role="menuitem"
-                style={{ display: 'flex', alignItems: 'center', gap: 12, minHeight: 48, padding: '0 12px', borderRadius: 10, fontWeight: 600, fontSize: '0.9rem' }}
+                style={rowStyle}
               >
                 <Icon name={m.icon} size={18} /> {m.label}
               </NavLink>
             ))}
+
+            <div className="menu__divider" role="separator" aria-hidden="true" />
+
+            <button
+              type="button"
+              role="menuitem"
+              className="menu__dev"
+              style={{ ...rowStyle, width: '100%', textAlign: 'left', color: 'var(--text-muted)' }}
+              onClick={() => {
+                setMoreOpen(false);
+                openDeveloper();
+              }}
+            >
+              <Icon name="code" size={18} /> {t('nav.developer')}
+            </button>
           </div>
         </>
       )}

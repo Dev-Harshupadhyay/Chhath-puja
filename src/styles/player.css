@@ -23,7 +23,7 @@
   padding-bottom: var(--safe-b);
   display: flex;
   align-items: center;
-  background: rgba(20, 9, 6, 0.93);
+  background: rgba(10, 14, 28, 0.93);
   backdrop-filter: blur(20px) saturate(160%);
   border-top: 1px solid var(--border-strong);
   box-shadow: 0 -14px 40px -18px rgba(0, 0, 0, 0.8);
@@ -499,7 +499,7 @@
   min-width: 210px;
   padding: var(--s-2);
   border-radius: var(--r-md);
-  background: rgba(28, 13, 9, 0.98);
+  background: rgba(17, 23, 49, 0.98);
   border: 1px solid var(--border-strong);
   box-shadow: var(--shadow-lg);
   backdrop-filter: blur(12px);
