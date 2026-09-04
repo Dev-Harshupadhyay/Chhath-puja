@@ -12,7 +12,7 @@ import { fmtTime } from '../../lib/format';
  * desktop; a compact mini-player that expands on tap on mobile.
  */
 function StickyPlayer() {
-  const { current, isPlaying, isBuffering, favorites, volume, muted, index, queue } = usePlayer();
+  const { current, isPlaying, isBuffering, favorites, volume, muted, index, queue, error } = usePlayer();
   const A = usePlayerActions();
   const { currentTime, duration } = useProgress();
   const { openExpanded, toggleQueue } = useUI();
@@ -148,6 +148,18 @@ function StickyPlayer() {
           >
             <Icon name="queue" size={19} />
           </button>
+
+          {error && (
+            <button
+              className="icon-btn"
+              onClick={() => A.retry()}
+              aria-label="Retry playback"
+              title={error}
+              style={{ color: 'var(--danger)' }}
+            >
+              <Icon name="repeat" size={19} />
+            </button>
+          )}
         </div>
       </div>
     </div>

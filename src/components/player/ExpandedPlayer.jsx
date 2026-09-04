@@ -12,7 +12,7 @@ import { fmtTime, shareText } from '../../lib/format';
 
 /** Full-screen "now playing" — the app-like layer over the embed. */
 export default function ExpandedPlayer() {
-  const { current, isPlaying, isBuffering, favorites, shuffle, upNext } = usePlayer();
+  const { current, isPlaying, isBuffering, favorites, shuffle, repeat, upNext, error } = usePlayer();
   const A = usePlayerActions();
   const { currentTime, duration } = useProgress();
   const { expandedOpen, closeExpanded, queueOpen, openQueue } = useUI();
@@ -160,7 +160,34 @@ export default function ExpandedPlayer() {
             >
               <Icon name="heart" size={22} filled={isFav} />
             </button>
+            <button
+              className={`icon-btn ${repeat !== 'off' ? 'icon-btn--on' : ''}`}
+              onClick={() => A.setRepeat(repeat === 'off' ? 'all' : repeat === 'all' ? 'one' : 'off')}
+              aria-label={`Repeat: ${repeat}`}
+              title={`Repeat: ${repeat}`}
+              style={{ position: 'relative' }}
+            >
+              <Icon name="repeat" size={22} />
+              {repeat === 'one' && <span className="repeat-badge">1</span>}
+            </button>
           </div>
+
+          {error && (
+            <div className="player-error" role="alert">
+              <span>{error}</span>
+              <button className="btn btn--ghost btn--sm" onClick={() => A.retry()}>
+                <Icon name="play" size={13} filled strokeWidth={0} /> Phir se
+              </button>
+              <a
+                className="btn btn--quiet btn--sm"
+                href={watchUrl(current)}
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                YouTube par kholein
+              </a>
+            </div>
+          )}
 
           <div className="expanded__aux">
             <button

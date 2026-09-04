@@ -6,6 +6,7 @@ import { usePlayerActions, usePlayer } from '../../context/PlayerContext';
 import { songs } from '../../data/songs';
 import { artists } from '../../data/artists';
 import { festivalStatus } from '../../lib/festival';
+import { useName } from '../../context/NameContext';
 
 /* Six diyas, each its own slow breathing cycle.
    Transform + opacity only — no layout, no repaint. */
@@ -21,6 +22,7 @@ const DIYAS = [
 export default function Hero() {
   const A = usePlayerActions();
   const { mood } = usePlayer();
+  const { name, hasName, askAgain } = useName();
   const status = useMemo(() => festivalStatus(), []);
 
   const startListening = () => {
@@ -60,6 +62,17 @@ export default function Hero() {
       </div>
 
       <div className="shell hero__inner">
+        {hasName && (
+          <p className="hero__greet" style={{ marginBottom: 14 }}>
+            <span className="deva">
+              जय छठी मैया, <b>{name}</b> 🙏
+            </span>
+            <button onClick={askAgain} aria-label="Apna naam badlein" title="Naam badlein">
+              <Icon name="mic" size={13} />
+            </button>
+          </p>
+        )}
+
         <p className="hero__kicker">
           <Icon name="sun" size={13} /> छठ महापर्व · Chhath Mahaparva
         </p>

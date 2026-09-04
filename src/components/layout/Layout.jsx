@@ -7,6 +7,7 @@ import Toast from './Toast';
 import StickyPlayer from '../player/StickyPlayer';
 import ExpandedPlayer from '../player/ExpandedPlayer';
 import Lightbox from '../common/Lightbox';
+import NameGate from '../common/NameGate';
 import { usePlayer } from '../../context/PlayerContext';
 
 export default function Layout() {
@@ -44,6 +45,7 @@ export default function Layout() {
       <StickyPlayer />
       <ExpandedPlayer />
       <Lightbox />
+      <NameGate />
       <Toast />
     </>
   );

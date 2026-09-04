@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { PlayerProvider } from './context/PlayerContext';
 import { UIProvider } from './context/UIContext';
+import { NameProvider } from './context/NameContext';
 
 import './styles/tokens.css';
 import './styles/base.css';
@@ -15,7 +16,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <PlayerProvider>
         <UIProvider>
-          <App />
+          <NameProvider>
+            <App />
+          </NameProvider>
         </UIProvider>
       </PlayerProvider>
     </BrowserRouter>

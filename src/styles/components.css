@@ -1727,3 +1727,125 @@
     transform: rotate(360deg);
   }
 }
+
+/* ── Name gate ("Chhathi Maiya calls you") ─────────────────── */
+.namegate {
+  position: fixed;
+  inset: 0;
+  z-index: 190;
+  display: grid;
+  place-items: center;
+  padding: var(--s-4);
+}
+.namegate__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 3, 2, 0.82);
+  backdrop-filter: blur(10px);
+  animation: fade-in var(--dur) var(--ease);
+}
+.namegate__card {
+  position: relative;
+  width: min(420px, 100%);
+  padding: clamp(24px, 5vw, 38px);
+  text-align: center;
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-strong);
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(240, 165, 68, 0.18), transparent 62%),
+    linear-gradient(180deg, #26100c, #150806);
+  box-shadow: var(--shadow-lg);
+  animation: namegate-in 0.42s var(--ease);
+}
+@keyframes namegate-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.namegate__sun {
+  display: block;
+  font-size: 2.1rem;
+  line-height: 1;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 0 18px rgba(240, 165, 68, 0.6));
+}
+.namegate__title {
+  font-size: var(--fs-h3);
+  color: var(--saffron-300);
+}
+.namegate__sub {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+}
+.namegate__field {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  height: 52px;
+  margin: var(--s-5) 0 var(--s-3);
+  padding: 0 var(--s-4);
+  border-radius: var(--r-pill);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-faint);
+  transition: border-color var(--dur) var(--ease);
+}
+.namegate__field:focus-within {
+  border-color: var(--saffron-400);
+}
+.namegate__field input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  outline: none;
+  font-size: 1rem;
+  color: var(--text);
+}
+.namegate__field input::placeholder {
+  color: var(--text-faint);
+}
+.namegate__note {
+  margin-top: var(--s-4);
+  font-size: var(--fs-2xs);
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* Greeting chip in the hero */
+.hero__greet {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: 6px 8px 6px 14px;
+  border-radius: var(--r-pill);
+  background: rgba(20, 8, 5, 0.55);
+  border: 1px solid rgba(232, 206, 143, 0.3);
+  backdrop-filter: blur(8px);
+  font-size: var(--fs-sm);
+  color: var(--parchment);
+}
+.hero__greet b {
+  color: var(--saffron-300);
+}
+.hero__greet button {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--text-faint);
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease);
+}
+.hero__greet button:hover {
+  background: var(--surface-3);
+  color: var(--text);
+}

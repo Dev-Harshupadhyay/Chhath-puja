@@ -31,4 +31,6 @@ export const KEYS = {
   volume: 'volume',
   mood: 'mood',
   progress: 'progress',
+  name: 'name',
+  nameSkipped: 'name-skipped',
 };

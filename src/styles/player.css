@@ -573,3 +573,32 @@
   height: 100%;
   border: 0;
 }
+
+/* Repeat "1" badge + inline error row */
+.repeat-badge {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  font-size: 9px;
+  font-weight: 800;
+  line-height: 1;
+  padding: 1px 3px;
+  border-radius: 4px;
+  background: var(--saffron-400);
+  color: #2a0f06;
+}
+.player-error {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  width: 100%;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-md);
+  background: rgba(224, 101, 79, 0.12);
+  border: 1px solid rgba(224, 101, 79, 0.35);
+  font-size: var(--fs-sm);
+  color: var(--text-soft);
+  text-align: center;
+}
