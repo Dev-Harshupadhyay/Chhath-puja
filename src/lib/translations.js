@@ -57,6 +57,7 @@ const en = {
 
   'sig.madeWith': 'Made with devotion for Chhath Puja',
   'sig.madeBy': 'Made by',
+  'sig.portfolioTitle': 'Visit HARSH’s portfolio (opens in a new tab)',
 
   'nav.developer': 'Developer',
 };
@@ -96,6 +97,7 @@ const hi = {
 
   'sig.madeWith': 'छठ पूजा के प्रति श्रद्धा के साथ निर्मित',
   'sig.madeBy': 'निर्माता',
+  'sig.portfolioTitle': 'HARSH का पोर्टफ़ोलियो देखें (नई टैब में खुलता है)',
 
   'nav.developer': 'डेवलपर',
 };
@@ -135,6 +137,7 @@ const bho = {
 
   'sig.madeWith': 'छठ पूजा के भक्ति के संगे बनावल गइल',
   'sig.madeBy': 'बनावे वाला',
+  'sig.portfolioTitle': 'HARSH के पोर्टफोलियो देखीं (नई टैब में खुली)',
 
   'nav.developer': 'डेवलपर',
 };
