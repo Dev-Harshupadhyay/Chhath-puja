@@ -142,6 +142,7 @@ export default function DeveloperProfile() {
             HARSH
           </h2>
           <p className="devprofile__role">{t('dev.cardRole')}</p>
+          <p className="devprofile__bio">“{t('dev.bio')}”</p>
         </header>
 
         <div className="devprofile__body" ref={bodyRef}>

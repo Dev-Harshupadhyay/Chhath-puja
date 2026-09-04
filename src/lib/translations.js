@@ -33,6 +33,7 @@ const en = {
   'dev.close': 'Close developer profile',
 
   'dev.role': 'Creator & Developer',
+  'dev.bio': 'Code is like humor. When you have to explain it, it\u2019s bad.',
   'dev.cardRole': 'Creator • Developer • Chhath Geet',
 
   'dev.intro':
@@ -71,6 +72,7 @@ const hi = {
   'dev.close': 'डेवलपर प्रोफ़ाइल बंद करें',
 
   'dev.role': 'रचनाकार एवं डेवलपर',
+  'dev.bio': 'कोड हास्य की तरह है — अगर उसे समझाना पड़े, तो वह अच्छा नहीं है।',
   'dev.cardRole': 'रचनाकार • डेवलपर • छठ गीत',
 
   'dev.intro':
@@ -109,6 +111,7 @@ const bho = {
   'dev.close': 'डेवलपर प्रोफाइल बंद करीं',
 
   'dev.role': 'रचनाकार आ डेवलपर',
+  'dev.bio': 'कोड हँसी जइसन होला — जब एकरा समझावे के पड़े, त समझ लीं कि ओह में गड़बड़ बा।',
   'dev.cardRole': 'रचनाकार • डेवलपर • छठ गीत',
 
   'dev.intro':
