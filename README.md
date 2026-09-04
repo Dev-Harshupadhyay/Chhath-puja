@@ -1,108 +1,239 @@
+<div align="center">
+
+<img src="./docs/banner.jpg" alt="Chhath Geet — devotees offering arghya to the rising sun at a river ghat" width="100%" />
+
+<br />
+
 # छठ गीत · Chhath Geet
 
-A premium Chhath Puja devotional music experience — Spotify-grade playback
-interaction, Indian devotional cultural identity, and Chhath ghat visual
-storytelling.
+**“सूर्य देव की आराधना, लोकगीतों की मिठास।”**
+_Devotional songs for the sacred festival of Chhath._
 
-**Live:** https://chhathgeetsong.lovable.app
+<br />
+
+[![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=20232a)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-F7DF1E?style=flat-square&logo=javascript&logoColor=20232a)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Router](https://img.shields.io/badge/React_Router-6.30-CA4245?style=flat-square&logo=reactrouter&logoColor=white)](https://reactrouter.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-ff69b4?style=flat-square)](https://github.com/Dev-Harshupadhyay/Chhath-puja/pulls)
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FDev-Harshupadhyay%2FChhath-puja)
+
+</div>
 
 ---
 
 ## What this is
 
-Chhath Geet is a listening app for the folk songs of Chhath — the four-day
-festival of the Sun observed across Bihar, Jharkhand, eastern UP and the Nepal
-Terai. It is built around one idea: **make the real songs easy to find and
-beautiful to play.**
+Chhath Geet is a listening app for the folk songs of **Chhath** — the four-day festival of the Sun
+observed across Bihar, Jharkhand, eastern Uttar Pradesh and the Nepal Terai.
 
-- 37 Chhath geet from 15 artists
-- 9 curated playlists, one for every hour of the festival
-- The four days of Chhath as an interactive ritual guide
-- A persistent, app-grade player with queue, favourites and resume
+It is built around one idea: **make the real songs easy to find and beautiful to play.**
+
+- 🎵 **37 Chhath geet** from **15 artists**
+- 🎧 A persistent, app-grade player with queue, favourites and resume
+- 📅 The **four days of Chhath** as an interactive ritual guide
+- 📜 **9 curated playlists**, one for every hour of the festival
+- 🖼️ A Chhath **gallery** with lightbox and categories
+- 🌅 **Morning / Evening / Night** moods that repaint the whole interface
+
+<div align="center">
+  <img src="./public/images/hero-madhubani.jpg" alt="Chhathi Maiya" width="32%" />
+  <img src="./public/images/ghat-usha-argh.jpg" alt="The ghat at Usha Arghya" width="32%" />
+  <img src="./public/images/sandhya-diya.jpg" alt="Diyas at the ghat" width="32%" />
+</div>
+
+---
+
+## Features
+
+### Player
+- Sticky bar driven by the **YouTube IFrame API** — real play/pause/seek/duration/volume, not a
+  passive `<iframe>`
+- Expanded full-screen **now playing** screen with large artwork, share and queue
+- **Queue drawer** with drag reorder, keyboard reorder (arrow keys), remove and clear
+- Favourites, shuffle, and **resume from where you stopped**
+- Compact **mini-player** on mobile that expands on tap
+
+### Discovery
+- Instant **search** across title, Hindi title, artist and channel
+  (`Pawan Singh`, `Sharda Sinha`, `Uga Hai Suraj Dev`, `Chhathi Maiya`)
+- **Sort** by popularity, title, artist, length
+- **Filters** by artist, mood and Chhath day
+- Grid and list layouts, skeleton loaders, real empty states
+
+### Culture
+- Cinematic hero — layered sunrise, haze and water with six GPU-only diyas
+- **The Four Days**: Nahay Khay, Kharna, Sandhya Arghya, Usha Arghya — each with ritual, meaning,
+  practices, prasad and its own songs
+- Artist pages with play-all and follow
+- Festival countdown driven by the real Chhath calendar (2025–2028)
+
+### Foundation
+- 44px touch targets, ARIA on every icon-only control, keyboard-operable sliders
+- Focus trap and <kbd>Esc</kbd> on all sheets, skip link, `aria-live` toasts
+- `prefers-reduced-motion` honoured throughout
+- Hindi + English SEO: Open Graph, Twitter cards, JSON-LD, sitemap, PWA manifest
+
+---
+
+## Tech stack
+
+| Layer | Choice |
+|---|---|
+| Build tool | **Vite 5.4** |
+| UI | **React 18.3** |
+| Routing | **react-router-dom 6.30** (client-side, code-split) |
+| Styling | **Hand-built CSS design tokens** — no framework, no template |
+| State | React Context (State / Actions / Progress split) |
+| Persistence | `localStorage` |
+| Playback | **YouTube IFrame Player API** (official embed) |
+| Backend | **None** — pure static SPA |
+| Secrets | **Zero** — no API keys, no `.env` |
+
+Only four runtime packages. Total JS ships at **~92 KB gzipped**.
+
+---
+
+## Quick start
+
+```bash
+git clone https://github.com/Dev-Harshupadhyay/Chhath-puja.git
+cd Chhath-puja
+npm install
+npm run dev      # http://localhost:5173
+```
+
+```bash
+npm run build      # production build -> dist/
+npm run preview    # serve the production build locally
+```
+
+Requires **Node 18+**.
+
+---
+
+## Project structure
+
+```
+src/
+├── data/          # songs · artists · days · playlists · gallery   (real data)
+├── lib/           # format · storage · festival dates · YouTube API loader
+├── context/       # PlayerProvider (transport + queue + favourites) · UIProvider
+├── hooks/         # useReveal · useMediaQuery · useBodyScrollLock
+├── components/
+│   ├── layout/    # Navbar · BottomNav · Footer · Layout · Toast
+│   ├── player/    # StickyPlayer · ExpandedPlayer · QueueDrawer
+│   ├── home/      # Hero · MoodSection · FourDays · Gallery · About…
+│   ├── common/    # SongCard · SongRow · SongMenu · Slider · Lightbox · Skeleton
+│   └── Icon.jsx   # one inline SVG set — zero extra requests
+├── pages/         # Home · Library · Artists · Playlists · FourDays ·
+│                  # Gallery · Favorites · NotFound
+└── styles/        # tokens · base · components · player
+```
+
+### Why three player contexts
+
+`PlayerProvider` splits state into **State**, **Actions** and **Progress**. The progress context
+ticks four times a second; keeping it separate stops a moving seek bar from re-rendering the entire
+37-song library on every tick.
+
+---
 
 ## Data integrity
 
 Every song is real. Nothing is invented.
 
 | Field | Source |
-| --- | --- |
+|---|---|
 | `youtubeId` | Official video id, **verified playable** against YouTube |
-| `seconds` | Real runtime read from the video's `lengthSeconds` |
+| `seconds` | Real runtime read from each video's `lengthSeconds` |
 | `artist` / `channel` | As published on the official upload |
 | `title` / `hindiTitle` | Catalogue metadata, carried over unedited |
 | `day` | Which of the four days the geet belongs to |
-| `moods` | **Curation, not metadata** — maps a song's Chhath day onto the Morning / Evening / Night listening modes |
+| `moods` | **Curation, not metadata** — maps a song's Chhath day onto the Morning / Evening / Night modes |
 
-Where data genuinely does not exist, the UI says so instead of guessing —
-for example the player shows **“Lyrics unavailable”** rather than fabricating
-words, and artist pages show no biography because none was sourced.
+Where data genuinely does not exist, the UI says so instead of guessing — the player shows
+**“Lyrics unavailable”** rather than fabricating words, and artist pages show no biography because
+none was sourced.
 
-No audio is downloaded or hosted. Playback is the **official YouTube embed**,
-driven through the IFrame Player API so the app gets true play/pause/seek/
-duration/volume control rather than a passive `<iframe>`. There is no YouTube
-Data API key in this codebase — nothing secret to leak.
-
-## Stack
-
-- React 18 + Vite (JavaScript, no TypeScript)
-- `react-router-dom` v6, route-level code splitting
-- Plain CSS with a design-token layer (no framework, no template)
-- `localStorage` for favourites, saved playlists, recent, mood and volume
-
-No CSS framework. The design system in `src/styles/tokens.css` is hand-built
-around a Chhath ghat palette: sindoor, saffron, muted gold, parchment, deep
-brown, and the indigo that comes just before the sun clears the river.
-
-## Getting started
-
-```bash
-npm install
-npm run dev      # http://localhost:5173
-npm run build
-npm run preview
-```
-
-## Architecture
-
-```
-src/
-├── data/          songs · artists · days · playlists · gallery  (real data)
-├── lib/           format · storage · festival dates · YouTube API loader
-├── context/       PlayerProvider (transport + queue + favourites) · UIProvider
-├── hooks/         useReveal · useMediaQuery · useBodyScrollLock
-├── components/
-│   ├── layout/    Navbar · BottomNav · Footer · Layout · Toast
-│   ├── player/    StickyPlayer · ExpandedPlayer · QueueDrawer
-│   ├── home/      Hero · MoodSection · FourDays · Gallery · About…
-│   ├── common/    SongCard · SongRow · SongMenu · Slider · Lightbox · Skeleton
-│   └── Icon.jsx   one inline SVG set, zero extra requests
-├── pages/         Home · Library · Artists · Playlists · FourDays ·
-│                  Gallery · Favorites · NotFound
-└── styles/        tokens · base · components · player
-```
-
-### Why three player contexts
-
-`PlayerProvider` splits state into **State**, **Actions** and **Progress**.
-The progress context ticks four times a second; keeping it separate stops a
-moving seek bar from re-rendering the entire 37-song library on every tick.
-
-## Performance
-
-- Images right-sized to 1400px progressive JPEG with inline blur placeholders
-  (the original `public/images` was **14.7 MB → 1.8 MB**)
-- Route-level code splitting; vendor chunk cached separately
-- Lazy-loaded artwork, skeleton loading states, shimmer placeholders
-- Animations are transform/opacity only; the hero's six diyas cost nothing
-- `prefers-reduced-motion` is honoured everywhere
-
-## Accessibility
-
-- 44px minimum touch targets, keyboard-reachable sliders (arrows, Home/End)
-- Visible focus rings, semantic landmarks, ARIA on all icon-only controls
-- Skip link, `aria-pressed` toggles, `aria-live` toasts
-- Lightbox and sheets trap focus and close on `Escape`
+No audio is downloaded or hosted. Playback is the **official YouTube embed**, so no API key is
+needed and there is no secret to leak.
 
 ---
 
+## Performance
+
+| | |
+|---|---|
+| `public/images` | **14.7 MB → 1.8 MB** (right-sized progressive JPEGs) |
+| Image loading | Lazy + inline blur placeholders, no layout shift |
+| JS | Route-level code splitting, vendor chunk cached separately |
+| Animation | Transform/opacity only — the six hero diyas cost nothing |
+| Motion | `prefers-reduced-motion` disables all of it |
+
+---
+
+## Deployment
+
+`vercel.json` is committed, so Vercel picks up everything automatically:
+
+| Setting | Value |
+|---|---|
+| Framework Preset | **Vite** |
+| Build Command | `npm run build` |
+| Output Directory | `dist` |
+| Environment Variables | **none** |
+
+The catch-all rewrite is required — without it, refreshing `/library` or `/four-days/kharna`
+returns a 404 on a static host.
+
+<details>
+<summary>Deploying somewhere else?</summary>
+
+**GitHub Pages** — add a `404.html` copy of `index.html`, or use `HashRouter`.
+**Netlify** — add `_redirects` containing `/* /index.html 200`.
+**Any static host** — serve `dist/` and route all unknown paths to `index.html`.
+
+</details>
+
+---
+
+## Roadmap
+
+- [ ] Lyrics support (only once real, sourced lyrics exist)
+- [ ] Offline-capable service worker
+- [ ] Share-a-playlist links
+- [ ] Festival reminder notifications
+- [ ] Artist photos and bios (sourced, never generated)
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. Please keep the data rules intact: **never add a song,
+artist, duration or link you have not verified.**
+
+```bash
+npm run dev     # develop
+npm run build   # verify the production build before opening a PR
+```
+
+---
+
+## Credits
+
+Built and maintained by **Harsh Upadhyay**.
+All songs remain the property of their respective artists, labels and YouTube channels — this
+project streams them through official embeds and claims no ownership.
+
+---
+
+<div align="center">
+
 Made with ❤️ for Chhath Puja · Made by Harsh
+
+[github.com/Dev-Harshupadhyay](https://github.com/Dev-Harshupadhyay)
+
+</div>
