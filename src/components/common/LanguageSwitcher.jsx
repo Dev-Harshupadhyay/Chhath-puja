@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { LANGS } from '../../lib/translations';
 
@@ -8,15 +9,19 @@ import { LANGS } from '../../lib/translations';
  * are glass, so the active choice is obvious at a glance without
  * shouting. Switches are instant and never reload the player.
  */
-export default function LanguageSwitcher({ id = 'lang-switcher', className = '' }) {
+export default function LanguageSwitcher({ id, className = '' }) {
   const { lang, setLang, t } = useLanguage();
+  /* This control appears in three places at once (navbar, drawer,
+     developer profile), so each instance gets its own id — duplicate
+     ids break getElementById and assistive tech. */
+  const autoId = useId();
 
   return (
     <div
       className={`langswitch ${className}`}
       role="group"
       aria-label={t('lang.label')}
-      id={id}
+      id={id || autoId}
     >
       {LANGS.map((l) => {
         const active = l.id === lang;

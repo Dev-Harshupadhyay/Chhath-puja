@@ -173,13 +173,17 @@ export default function DeveloperProfile() {
             <footer className="devprofile__jai deva">जय छठी मैया 🙏</footer>
           </blockquote>
 
+        </div>
+
+        <footer className="devprofile__foot">
+          {/* The language control lives in the footer, which never
+              scrolls — so it is always reachable no matter how far
+              down the profile you are. */}
           <div className="devprofile__lang">
             <span className="devprofile__lang-label">{t('lang.label')}</span>
             <LanguageSwitcher />
           </div>
-        </div>
 
-        <footer className="devprofile__foot">
           <CreatorSignature />
         </footer>
       </div>
