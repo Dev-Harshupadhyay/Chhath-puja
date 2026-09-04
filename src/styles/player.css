@@ -63,7 +63,7 @@
   flex: none;
   border-radius: var(--r-sm);
   overflow: hidden;
-  background: #22100b;
+  background: var(--surface-solid);
 }
 .player__art img {
   width: 100%;
@@ -113,7 +113,7 @@
   flex: none;
   border-radius: var(--r-pill);
   background: linear-gradient(135deg, var(--saffron-300), var(--saffron-500));
-  color: #2a0f06;
+  color: var(--ink);
   box-shadow: 0 6px 20px -6px rgba(240, 165, 68, 0.8);
   transition: transform var(--dur-fast) var(--ease);
 }
@@ -241,7 +241,7 @@
   flex-direction: column;
   background:
     radial-gradient(90% 60% at 50% 0%, rgba(240, 165, 68, 0.14), transparent 60%),
-    linear-gradient(180deg, #1b0a07 0%, #0e0504 100%);
+    linear-gradient(180deg, var(--bg-elev) 0%, var(--bg-deep) 100%);
   animation: expand-in 0.34s var(--ease);
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -281,7 +281,7 @@
   aspect-ratio: 1;
   border-radius: var(--r-xl);
   overflow: hidden;
-  background: #22100b;
+  background: var(--surface-solid);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
 }
 .expanded__art img {
@@ -352,7 +352,7 @@
   z-index: 140;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #1c0b08, #120605);
+  background: linear-gradient(180deg, var(--surface-solid-2), var(--bg-deep));
   border: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
 }
@@ -463,7 +463,7 @@
   height: 42px;
   border-radius: var(--r-xs);
   overflow: hidden;
-  background: #22100b;
+  background: var(--surface-solid);
 }
 .queue__art img {
   width: 100%;
@@ -585,7 +585,7 @@
   padding: 1px 3px;
   border-radius: 4px;
   background: var(--saffron-400);
-  color: #2a0f06;
+  color: var(--ink);
 }
 .player-error {
   display: flex;

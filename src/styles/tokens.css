@@ -1,77 +1,123 @@
 /* ═══════════════════════════════════════════════════════════
-   Chhath Geet — design tokens
-   A Chhath ghat at dawn: sindoor, saffron, muted gold,
-   parchment, deep brown, and the indigo that comes just
-   before the sun clears the river.
+   Chhath Geet — design tokens  (v2 · "luxury temple" palette)
+
+   A Chhath ghat before dawn: deep navy water, the first
+   saffron band on the horizon, brass lota catching the light.
+
+   Every colour used anywhere in the app resolves to a token
+   declared here. Components never hardcode hex values.
    ═══════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Raw palette ───────────────────────────────────────── */
+  /* ── Raw palette ─────────────────────────────────────────
+     Kept for gradients and one-off blends. Prefer the
+     semantic layer below for anything component-facing.   */
+
+  /* Deep navy family */
+  --navy-900: #080C18;
+  --navy-850: #0B1020;
+  --navy-800: #0F1526;
+  --navy-700: #161D33;
+  --navy-600: #1E2740;
+  --navy-500: #2A3450;
+
+  /* Gold family */
+  --gold-700: #8C6D1F;
+  --gold-600: #A8851C;
+  --gold-500: #C9A227;
+  --gold-400: #D4AF37; /* brand gold */
+  --gold-300: #E2C765;
+
+  /* Saffron family */
+  --saffron-200: #FBD9A0;
+  --saffron-600: #C9741F;
+  --saffron-500: #E08A2B;
+  --saffron-400: #F59E0B; /* brand saffron */
+  --saffron-300: #F7C377;
+
+  /* Warm ivory family */
+  --ivory-100: #F8F5ED;
+  --ivory-200: #EFEADA;
+  --warm-gold: #F4D58D;
+
+  /* Neutral text */
+  --slate-400: #A9ADBA;
+  --slate-500: #7C8194;
+
+  /* Ink — the dark text used on top of gold / saffron fills
+     (active language chip, primary buttons, badges). */
+  --ink: #0B1020;
+
+  /* Legacy aliases — old names kept so historic CSS keeps working */
   --sindoor-900: #2a0b0a;
   --sindoor-800: #4a1210;
   --sindoor-700: #6b1b14;
   --sindoor-600: #8a2318;
   --sindoor-500: #a33223;
-
-  --saffron-600: #c9741f;
-  --saffron-500: #e08a2b;
-  --saffron-400: #f0a544;
-  --saffron-300: #f7c377;
-
-  --gold-600: #a8851c;
-  --gold-500: #c9a227;
-  --gold-400: #d9b45b;
-  --gold-300: #e8ce8f;
-
   --cream-050: #fffbf4;
   --cream-100: #fdf8ef;
   --cream-200: #f7eddd;
   --parchment: #efe2cb;
   --parchment-dim: #d9c9ae;
-
   --brown-900: #241408;
   --brown-800: #3b2417;
   --brown-700: #54341f;
-
   --night-900: #0e1330;
   --night-800: #161c3a;
   --night-700: #1f2749;
-
   --river-900: #0c2229;
   --river-700: #1b4550;
-
   --marigold: #f4a52a;
 
-  /* ── Semantic ──────────────────────────────────────────── */
-  --bg: #1a0a08;
-  --bg-deep: #120705;
-  --surface: rgba(255, 233, 205, 0.045);
-  --surface-2: rgba(255, 233, 205, 0.075);
-  --surface-3: rgba(255, 233, 205, 0.11);
-  --surface-solid: #26100c;
-  --border: rgba(232, 206, 143, 0.16);
-  --border-strong: rgba(232, 206, 143, 0.3);
+  /* ── Semantic: surface ─────────────────────────────────── */
+  --bg: #0B1020;
+  --bg-deep: #080C18;
+  --bg-elev: #0F1526;
 
-  --text: var(--cream-100);
-  --text-soft: rgba(253, 248, 239, 0.78);
-  --text-muted: rgba(253, 248, 239, 0.56);
-  --text-faint: rgba(253, 248, 239, 0.38);
+  /* Translucent "glass" surfaces, light-tinted so they read
+     as frosted panels over the navy base. */
+  --surface: rgba(214, 224, 255, 0.045);
+  --surface-2: rgba(214, 224, 255, 0.075);
+  --surface-3: rgba(214, 224, 255, 0.11);
+  --surface-solid: #111731;
+  --surface-solid-2: #161D33;
 
-  --accent: var(--saffron-400);
-  --accent-soft: var(--saffron-300);
-  --accent-deep: var(--saffron-600);
-  --gold: var(--gold-400);
-  --danger: #e0654f;
+  --border: rgba(212, 175, 55, 0.16);
+  --border-strong: rgba(212, 175, 55, 0.32);
+  --border-subtle: rgba(214, 224, 255, 0.08);
+
+  /* ── Semantic: text ────────────────────────────────────── */
+  --text: #F8F5ED;
+  --text-soft: rgba(248, 245, 237, 0.82);
+  --text-muted: #A9ADBA;
+  --text-faint: rgba(169, 173, 186, 0.55);
+
+  /* ── Semantic: accent ──────────────────────────────────── */
+  --accent: #F59E0B;
+  --accent-soft: #F4D58D;
+  --accent-deep: #D4AF37;
+  --gold: #D4AF37;
+  --danger: #E0654F;
+  --success: #4CAF7D;
+
+  /* Signature brand gradient: gold → saffron */
+  --grad-brand: linear-gradient(135deg, #D4AF37 0%, #F4D58D 42%, #F59E0B 100%);
+  --grad-brand-soft: linear-gradient(135deg, rgba(212, 175, 55, 0.9) 0%, rgba(245, 158, 11, 0.85) 100%);
+  --grad-halo: radial-gradient(120% 90% at 50% 0%, rgba(212, 175, 55, 0.16) 0%, rgba(245, 158, 11, 0.06) 45%, transparent 78%);
+  --grad-veil: linear-gradient(180deg, rgba(8, 12, 24, 0) 0%, rgba(8, 12, 24, 0.72) 62%, rgba(8, 12, 24, 0.94) 100%);
 
   /* Mood tint — swapped by the Morning / Evening / Night rail */
-  --mood-a: rgba(224, 138, 43, 0.16);
-  --mood-b: rgba(107, 27, 20, 0.28);
-  --mood-glow: rgba(240, 165, 68, 0.5);
+  --mood-a: rgba(245, 158, 11, 0.14);
+  --mood-b: rgba(20, 28, 60, 0.32);
+  --mood-glow: rgba(212, 175, 55, 0.45);
 
-  /* ── Typography ────────────────────────────────────────── */
-  --font-display: 'Yatra One', 'Tiro Devanagari Hindi', Georgia, serif;
-  --font-deva: 'Tiro Devanagari Hindi', 'Nirmala UI', 'Noto Serif Devanagari', serif;
-  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* ── Typography ──────────────────────────────────────────
+     ONE display face (Playfair Display) + ONE body face (Inter).
+     Devanagari fallbacks follow each, since the brand mark and
+     song titles are Hindi/Bhojpuri.                          */
+  --font-display: 'Playfair Display', 'Tiro Devanagari Hindi', 'Yatra One', Georgia, serif;
+  --font-deva: 'Tiro Devanagari Hindi', 'Noto Serif Devanagari', 'Nirmala UI', serif;
+  --font-sans: 'Inter', 'Noto Sans Devanagari', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --fs-display: clamp(2.75rem, 9vw, 6.5rem);
   --fs-h1: clamp(2rem, 5.2vw, 3.5rem);
@@ -109,17 +155,19 @@
   --r-pill: 999px;
 
   /* ── Elevation ─────────────────────────────────────────── */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 22px 50px -18px rgba(0, 0, 0, 0.75), 0 6px 16px rgba(0, 0, 0, 0.35);
-  --shadow-glow: 0 0 0 1px rgba(240, 165, 68, 0.28), 0 8px 30px -8px rgba(240, 165, 68, 0.4);
-  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 22px 50px -18px rgba(0, 0, 0, 0.8), 0 6px 16px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 40px 90px -30px rgba(0, 0, 0, 0.9), 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-glow: 0 0 0 1px rgba(212, 175, 55, 0.3), 0 8px 30px -8px rgba(212, 175, 55, 0.42);
+  --shadow-gold: 0 10px 40px -12px rgba(212, 175, 55, 0.55);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.07);
 
   /* ── Motion ────────────────────────────────────────────── */
   --ease: cubic-bezier(0.16, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-fast: 0.16s;
-  --dur: 0.28s;
+  --dur: 0.3s; /* default transition: 300ms ease */
   --dur-slow: 0.5s;
 
   /* ── Chrome heights (kept in sync with the player) ─────── */
@@ -130,30 +178,52 @@
 }
 
 /* ── Mood themes ─────────────────────────────────────────────
-   The whole surface shifts hue when a mood is selected, but
-   nothing animates more than a slow gradient cross-fade.     */
+   The surface shifts hue when a mood is selected, but nothing
+   animates more than a slow gradient cross-fade.            */
 [data-mood='morning'] {
-  --mood-a: rgba(240, 165, 68, 0.22);
-  --mood-b: rgba(174, 92, 30, 0.2);
-  --mood-glow: rgba(247, 195, 119, 0.6);
-  --accent: var(--saffron-300);
+  --mood-a: rgba(245, 176, 66, 0.18);
+  --mood-b: rgba(140, 109, 31, 0.18);
+  --mood-glow: rgba(244, 213, 141, 0.55);
+  --accent: #F7C377;
 }
+
 [data-mood='evening'] {
-  --mood-a: rgba(226, 106, 40, 0.22);
-  --mood-b: rgba(122, 28, 20, 0.28);
-  --mood-glow: rgba(240, 140, 60, 0.5);
-  --accent: var(--saffron-400);
+  --mood-a: rgba(244, 140, 60, 0.2);
+  --mood-b: rgba(122, 44, 28, 0.22);
+  --mood-glow: rgba(245, 158, 11, 0.5);
+  --accent: #F59E0B;
 }
+
 [data-mood='night'] {
   --mood-a: rgba(60, 74, 148, 0.26);
-  --mood-b: rgba(14, 19, 48, 0.4);
-  --mood-glow: rgba(255, 196, 120, 0.45);
-  --accent: var(--saffron-300);
-  --bg: #0b0f22;
+  --mood-b: rgba(8, 12, 24, 0.45);
+  --mood-glow: rgba(244, 213, 141, 0.4);
+  --accent: #F4D58D;
+  --bg: #080C18;
   --surface: rgba(200, 210, 255, 0.05);
   --surface-2: rgba(200, 210, 255, 0.08);
   --surface-3: rgba(200, 210, 255, 0.13);
-  --surface-solid: #141a36;
+  --surface-solid: #0D1223;
   --border: rgba(200, 210, 255, 0.15);
   --border-strong: rgba(200, 210, 255, 0.28);
+}
+
+/* ── Reduced motion ──────────────────────────────────────────
+   Honour the OS setting globally: every animation and
+   transition collapses to a near-instant state change.      */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

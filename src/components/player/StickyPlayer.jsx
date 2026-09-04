@@ -74,8 +74,8 @@ function StickyPlayer() {
                 style={{
                   width: 18,
                   height: 18,
-                  border: '2px solid rgba(42,15,6,.35)',
-                  borderTopColor: '#2a0f06',
+                  border: '2px solid rgba(11,16,32,.35)',
+                  borderTopColor: 'var(--ink)',
                   borderRadius: '50%',
                   animation: 'spin 0.8s linear infinite',
                 }}

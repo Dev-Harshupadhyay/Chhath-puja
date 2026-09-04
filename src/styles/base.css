@@ -40,8 +40,8 @@ body::before {
   background:
     radial-gradient(120% 80% at 50% -10%, var(--mood-a) 0%, transparent 55%),
     radial-gradient(90% 60% at 100% 0%, var(--mood-b) 0%, transparent 60%),
-    radial-gradient(80% 70% at 0% 100%, rgba(12, 34, 41, 0.55) 0%, transparent 60%),
-    linear-gradient(180deg, #1d0b08 0%, #170907 45%, #120705 100%);
+    radial-gradient(80% 70% at 0% 100%, rgba(20, 28, 60, 0.55) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 45%, #05070F 100%);
   transition: background var(--dur-slow) var(--ease);
 }
 
