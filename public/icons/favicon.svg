@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chhath Geet">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4A1520"/>
+      <stop offset="0.55" stop-color="#A93A18"/>
+      <stop offset="1" stop-color="#E8963C"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1E3A46"/>
+      <stop offset="1" stop-color="#0E1B22"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFD98A" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#FFD98A" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#sky)"/>
+  <circle cx="32" cy="30" r="26" fill="url(#glow)"/>
+  <circle cx="32" cy="30" r="11" fill="#FFD98A"/>
+  <g stroke="#FFD98A" stroke-width="2.2" stroke-linecap="round" opacity="0.9">
+    <path d="M32 12v-5"/><path d="M32 53v-5"/><path d="M15 30h-5"/><path d="M54 30h-5"/>
+    <path d="M20 18l-3.5-3.5"/><path d="M44 18l3.5-3.5"/>
+    <path d="M20 42l-3.5 3.5"/><path d="M44 42l3.5 3.5"/>
+  </g>
+  <path d="M0 46h64v18H0z" fill="url(#water)"/>
+  <g fill="#FFD98A" opacity="0.92">
+    <path d="M14 49c3-2.6 7-2.6 10 0-3 2.6-7 2.6-10 0z"/>
+    <path d="M40 49c3-2.6 7-2.6 10 0-3 2.6-7 2.6-10 0z"/>
+  </g>
+  <g stroke="#FFCE7A" stroke-width="1.4" opacity="0.55" stroke-linecap="round">
+    <path d="M4 54h8"/><path d="M24 57h10"/><path d="M44 54h9"/><path d="M14 60h12"/><path d="M38 60h14"/>
+  </g>
+</svg>

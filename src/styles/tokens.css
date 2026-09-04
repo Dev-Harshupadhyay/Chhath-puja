@@ -1,0 +1,159 @@
+/* ═══════════════════════════════════════════════════════════
+   Chhath Geet — design tokens
+   A Chhath ghat at dawn: sindoor, saffron, muted gold,
+   parchment, deep brown, and the indigo that comes just
+   before the sun clears the river.
+   ═══════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Raw palette ───────────────────────────────────────── */
+  --sindoor-900: #2a0b0a;
+  --sindoor-800: #4a1210;
+  --sindoor-700: #6b1b14;
+  --sindoor-600: #8a2318;
+  --sindoor-500: #a33223;
+
+  --saffron-600: #c9741f;
+  --saffron-500: #e08a2b;
+  --saffron-400: #f0a544;
+  --saffron-300: #f7c377;
+
+  --gold-600: #a8851c;
+  --gold-500: #c9a227;
+  --gold-400: #d9b45b;
+  --gold-300: #e8ce8f;
+
+  --cream-050: #fffbf4;
+  --cream-100: #fdf8ef;
+  --cream-200: #f7eddd;
+  --parchment: #efe2cb;
+  --parchment-dim: #d9c9ae;
+
+  --brown-900: #241408;
+  --brown-800: #3b2417;
+  --brown-700: #54341f;
+
+  --night-900: #0e1330;
+  --night-800: #161c3a;
+  --night-700: #1f2749;
+
+  --river-900: #0c2229;
+  --river-700: #1b4550;
+
+  --marigold: #f4a52a;
+
+  /* ── Semantic ──────────────────────────────────────────── */
+  --bg: #1a0a08;
+  --bg-deep: #120705;
+  --surface: rgba(255, 233, 205, 0.045);
+  --surface-2: rgba(255, 233, 205, 0.075);
+  --surface-3: rgba(255, 233, 205, 0.11);
+  --surface-solid: #26100c;
+  --border: rgba(232, 206, 143, 0.16);
+  --border-strong: rgba(232, 206, 143, 0.3);
+
+  --text: var(--cream-100);
+  --text-soft: rgba(253, 248, 239, 0.78);
+  --text-muted: rgba(253, 248, 239, 0.56);
+  --text-faint: rgba(253, 248, 239, 0.38);
+
+  --accent: var(--saffron-400);
+  --accent-soft: var(--saffron-300);
+  --accent-deep: var(--saffron-600);
+  --gold: var(--gold-400);
+  --danger: #e0654f;
+
+  /* Mood tint — swapped by the Morning / Evening / Night rail */
+  --mood-a: rgba(224, 138, 43, 0.16);
+  --mood-b: rgba(107, 27, 20, 0.28);
+  --mood-glow: rgba(240, 165, 68, 0.5);
+
+  /* ── Typography ────────────────────────────────────────── */
+  --font-display: 'Yatra One', 'Tiro Devanagari Hindi', Georgia, serif;
+  --font-deva: 'Tiro Devanagari Hindi', 'Nirmala UI', 'Noto Serif Devanagari', serif;
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --fs-display: clamp(2.75rem, 9vw, 6.5rem);
+  --fs-h1: clamp(2rem, 5.2vw, 3.5rem);
+  --fs-h2: clamp(1.5rem, 3.6vw, 2.5rem);
+  --fs-h3: clamp(1.15rem, 2.3vw, 1.55rem);
+  --fs-h4: clamp(1rem, 1.8vw, 1.2rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.78rem;
+  --fs-2xs: 0.7rem;
+
+  /* ── Space ─────────────────────────────────────────────── */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --s-16: 64px;
+  --s-20: 80px;
+  --s-24: 96px;
+
+  --shell: 1240px;
+  --gutter: clamp(16px, 4vw, 40px);
+
+  /* ── Radii ─────────────────────────────────────────────── */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  /* ── Elevation ─────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.55), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 22px 50px -18px rgba(0, 0, 0, 0.75), 0 6px 16px rgba(0, 0, 0, 0.35);
+  --shadow-glow: 0 0 0 1px rgba(240, 165, 68, 0.28), 0 8px 30px -8px rgba(240, 165, 68, 0.4);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* ── Motion ────────────────────────────────────────────── */
+  --ease: cubic-bezier(0.16, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 0.16s;
+  --dur: 0.28s;
+  --dur-slow: 0.5s;
+
+  /* ── Chrome heights (kept in sync with the player) ─────── */
+  --nav-h: 68px;
+  --player-h: 76px;
+  --bottomnav-h: 62px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Mood themes ─────────────────────────────────────────────
+   The whole surface shifts hue when a mood is selected, but
+   nothing animates more than a slow gradient cross-fade.     */
+[data-mood='morning'] {
+  --mood-a: rgba(240, 165, 68, 0.22);
+  --mood-b: rgba(174, 92, 30, 0.2);
+  --mood-glow: rgba(247, 195, 119, 0.6);
+  --accent: var(--saffron-300);
+}
+[data-mood='evening'] {
+  --mood-a: rgba(226, 106, 40, 0.22);
+  --mood-b: rgba(122, 28, 20, 0.28);
+  --mood-glow: rgba(240, 140, 60, 0.5);
+  --accent: var(--saffron-400);
+}
+[data-mood='night'] {
+  --mood-a: rgba(60, 74, 148, 0.26);
+  --mood-b: rgba(14, 19, 48, 0.4);
+  --mood-glow: rgba(255, 196, 120, 0.45);
+  --accent: var(--saffron-300);
+  --bg: #0b0f22;
+  --surface: rgba(200, 210, 255, 0.05);
+  --surface-2: rgba(200, 210, 255, 0.08);
+  --surface-3: rgba(200, 210, 255, 0.13);
+  --surface-solid: #141a36;
+  --border: rgba(200, 210, 255, 0.15);
+  --border-strong: rgba(200, 210, 255, 0.28);
+}

@@ -2,24 +2,94 @@
 <html lang="hi">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>छठ गीत गाथा — Chhath Devotional Songs &amp; Bhakti</title>
-    <meta name="description" content="छठ महापर्व के भक्ति गीतों का संग्रह — सूर्य देव और छठी मैया की आराधना, नहाय-खाय से उषा अर्घ्य तक की पावन गाथा। सुनें, खोजें और पसंदीदा गीत सहेजें।" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
 
+    <title>Chhath Geet — छठ के लोकप्रिय भोजपुरी भक्ति गीत</title>
+    <meta
+      name="description"
+      content="छठ पूजा के लोकप्रिय गीत सुनें — शारदा सिन्हा, पवन सिंह, अनुराधा पौडवाल, कल्पना पटोवारी और अन्य कलाकारों के भक्ति गीत।"
+    />
+    <meta
+      name="keywords"
+      content="छठ गीत, Chhath Geet, Chhath Puja songs, छठ पूजा गीत, Sharda Sinha chhath geet, Pawan Singh chhath geet, Anuradha Paudwal chhath, Bhojpuri devotional, छठी मैया, संध्या अर्घ्य, उषा अर्घ्य, खरना, नहाय खाय"
+    />
+    <meta name="author" content="Harsh Upadhyay" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://chhathgeetsong.lovable.app/" />
+    <meta name="theme-color" content="#7A1F16" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="छठ गीत" />
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="छठ गीत गाथा — Chhath Devotional Songs & Bhakti" />
-    <meta property="og:description" content="छठ महापर्व के भक्ति गीतों का संग्रह — सूर्य देव और छठी मैया की आराधना की पावन गाथा।" />
-    <meta property="og:image" content="/images/og-cover.svg" />
+    <meta property="og:site_name" content="Chhath Geet — छठ गीत" />
+    <meta property="og:locale" content="hi_IN" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:title" content="Chhath Geet — छठ के लोकप्रिय भोजपुरी भक्ति गीत" />
+    <meta
+      property="og:description"
+      content="छठ पूजा के लोकप्रिय गीत सुनें — शारदा सिन्हा, पवन सिंह, अनुराधा पौडवाल, कल्पना पटोवारी और अन्य कलाकारों के भक्ति गीत।"
+    />
+    <meta property="og:url" content="https://chhathgeetsong.lovable.app/" />
+    <meta property="og:image" content="https://chhathgeetsong.lovable.app/images/hero-madhubani.jpg" />
+    <meta property="og:image:width" content="1400" />
+    <meta property="og:image:height" content="793" />
+    <meta property="og:image:alt" content="Chhath devotees offering arghya to the Sun at the ghat" />
 
-    <meta name="theme-color" content="#7A2E1D" />
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Chhath Geet — छठ के लोकप्रिय भोजपुरी भक्ति गीत" />
+    <meta
+      name="twitter:description"
+      content="छठ पूजा के लोकप्रिय गीत सुनें — शारदा सिन्हा, पवन सिंह, अनुराधा पौडवाल और अन्य कलाकारों के भक्ति गीत।"
+    />
+    <meta name="twitter:image" content="https://chhathgeetsong.lovable.app/images/hero-madhubani.jpg" />
 
+    <!-- Fonts: premium Devanagari display + serif, clean sans for UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Mukta:wght@400;500;600;700&family=Baloo+Bhai+2:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Tiro+Devanagari+Hindi:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Hero artwork is the LCP element: warm it up immediately -->
+    <link rel="preload" as="image" href="/images/hero-madhubani.jpg" fetchpriority="high" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Chhath Geet — छठ गीत",
+        "alternateName": "Chhath Geet",
+        "url": "https://chhathgeetsong.lovable.app/",
+        "inLanguage": ["hi-IN", "en-IN"],
+        "description": "छठ पूजा के लोकप्रिय भोजपुरी भक्ति गीत, official YouTube sources ke madhyam se.",
+        "publisher": { "@type": "Person", "name": "Harsh Upadhyay" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://chhathgeetsong.lovable.app/library?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <div style="padding: 2rem; font-family: sans-serif; color: #f5e9d7; background: #2a1108">
+        <h1>छठ गीत</h1>
+        <p>This listening experience needs JavaScript enabled.</p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
