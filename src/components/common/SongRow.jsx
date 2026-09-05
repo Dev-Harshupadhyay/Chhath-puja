@@ -1,9 +1,8 @@
 import { memo, useState } from 'react';
 import Icon from '../Icon';
-import LazyImage from './LazyImage';
+import SongThumb from './SongThumb';
 import SongMenu from './SongMenu';
 import { usePlayer, usePlayerActions } from '../../context/PlayerContext';
-import { thumb } from '../../data/songs';
 import { fmtTime } from '../../lib/format';
 import { dayByKey } from '../../data/days';
 
@@ -50,10 +49,12 @@ function SongRow({ song, queue, position }) {
 
       <div className="song-row__title">
         <div className="song-row__art">
-          <LazyImage src={thumb(song)} alt="" loading="lazy" />
-          <button className="song-row__play" onClick={onPlay} tabIndex={-1} aria-hidden="true">
-            <Icon name={isCurrent && isPlaying ? 'pause' : 'play'} size={18} />
-          </button>
+          {/* hqdefault is plenty for a 44px row — cheaper than maxres */}
+          <SongThumb song={song} alt="" size="hq">
+            <button className="song-row__play" onClick={onPlay} tabIndex={-1} aria-hidden="true">
+              <Icon name={isCurrent && isPlaying ? 'pause' : 'play'} size={18} />
+            </button>
+          </SongThumb>
         </div>
         <div style={{ minWidth: 0 }}>
           <b className="truncate" style={{ display: 'block' }}>

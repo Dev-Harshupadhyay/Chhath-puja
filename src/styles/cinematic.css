@@ -1,0 +1,956 @@
+/* ══════════════════════════════════════════════════════════════
+   CINEMATIC LAYER
+   Premium · Devotional · Warm · Golden
+
+   Rules this file follows, without exception:
+   • only `transform` and `opacity` animate (never width/top/left)
+   • every decoration is pointer-events:none and aria-hidden
+   • `prefers-reduced-motion` switches motion off, not down
+   • nothing here changes layout, so there are no layout shifts
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   1 · SCROLL REVEAL  (IntersectionObserver adds `.is-in`)
+   ───────────────────────────────────────────────────────────── */
+
+/*
+   Deliberately built from `animation` rather than `transition`.
+   A transition on `.reveal` would clobber the hover transitions the
+   cards already own; an animation with `backwards` fill leaves the
+   element's normal styles in charge the moment it finishes, so
+   hover, focus and active states keep working untouched.
+*/
+
+.reveal {
+  --reveal-i: 0;
+  --reveal-delay: 0ms;
+  opacity: 0;
+}
+
+/* only elements still waiting to be revealed are promoted */
+.reveal:not(.is-in) {
+  will-change: opacity, transform;
+}
+
+.reveal--rise {
+  transform: translate3d(0, 26px, 0);
+}
+.reveal--blur {
+  transform: translate3d(0, 18px, 0);
+  filter: blur(10px);
+}
+.reveal--scale {
+  transform: scale(0.965);
+}
+
+/* final resting state — this is what stays after the animation */
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  will-change: auto;
+}
+
+.reveal--rise.is-in {
+  animation: reveal-rise-in var(--dur-slow) var(--ease) backwards;
+}
+.reveal--fade.is-in {
+  animation: reveal-fade-in var(--dur-slow) var(--ease) backwards;
+}
+.reveal--blur.is-in {
+  animation: reveal-blur-in var(--dur-slow) var(--ease) backwards;
+}
+.reveal--scale.is-in {
+  animation: reveal-scale-in var(--dur-slow) var(--ease) backwards;
+}
+
+/* stagger — declared last so the shorthand above cannot reset it */
+.reveal.is-in {
+  animation-delay: calc(var(--reveal-delay, 0ms) + min(var(--reveal-i) * 70ms, 560ms));
+}
+
+@keyframes reveal-rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 26px, 0);
+  }
+}
+@keyframes reveal-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes reveal-blur-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    filter: blur(10px);
+  }
+}
+@keyframes reveal-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.965);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   2 · ATMOSPHERE  (particles · bokeh · diyas · water)
+   ───────────────────────────────────────────────────────────── */
+
+.atmo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.atmo__i {
+  position: absolute;
+  display: block;
+  will-change: transform, opacity;
+}
+
+/* golden light dust */
+.atmo--particles .atmo__i {
+  left: var(--a-left);
+  top: var(--a-top);
+  width: var(--a-size);
+  height: var(--a-size);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gold-300) 0%, rgba(245, 158, 11, 0.35) 55%, transparent 70%);
+  opacity: var(--a-opacity);
+  animation: atmo-float var(--a-dur) var(--a-delay) linear infinite;
+}
+
+/* soft out-of-focus devotional lights */
+.atmo--bokeh .atmo__i {
+  left: var(--a-left);
+  top: var(--a-top);
+  width: var(--a-size);
+  height: var(--a-size);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.5) 0%, rgba(245, 158, 11, 0.16) 45%, transparent 70%);
+  filter: blur(10px);
+  opacity: var(--a-opacity);
+  animation: atmo-drift var(--a-dur) var(--a-delay) ease-in-out infinite;
+}
+
+/* floating diyas with a flickering flame */
+.atmo--diyas .atmo__i {
+  left: var(--a-left);
+  bottom: var(--a-bottom);
+  width: var(--a-size);
+  height: calc(var(--a-size) * 0.62);
+  border-radius: 50% 50% 42% 42%;
+  background: linear-gradient(180deg, var(--saffron-300) 0%, var(--saffron-600) 60%, var(--brown-800, #4a2c14) 100%);
+  opacity: var(--a-opacity);
+  box-shadow: 0 0 calc(var(--a-size) * 1.6) rgba(245, 158, 11, 0.55);
+  animation: atmo-diya var(--a-dur) var(--a-delay) ease-in-out infinite;
+}
+
+.atmo--diyas .atmo__i::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -38%;
+  width: 34%;
+  height: 62%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 40% 40%;
+  background: radial-gradient(circle at 50% 75%, #fff6d8 0%, var(--saffron-400) 45%, rgba(245, 158, 11, 0) 78%);
+  animation: atmo-flame 1.5s var(--a-delay) ease-in-out infinite;
+}
+
+/* ghat water: ripples + slow sun reflection */
+.atmo--water .atmo__i {
+  left: var(--a-left);
+  top: var(--a-top);
+  width: var(--a-width);
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.55) 20%,
+    rgba(255, 240, 200, 0.85) 50%,
+    rgba(212, 175, 55, 0.55) 80%,
+    transparent
+  );
+  opacity: var(--a-opacity);
+  transform: scaleX(0.4);
+  animation: atmo-ripple var(--a-dur) var(--a-delay) ease-in-out infinite;
+}
+
+@keyframes atmo-float {
+  0% {
+    transform: translate3d(0, 12%, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--a-opacity);
+  }
+  88% {
+    opacity: var(--a-opacity);
+  }
+  100% {
+    transform: translate3d(var(--a-drift), -78%, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes atmo-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(var(--a-drift), -18px, 0) scale(1.12);
+  }
+}
+
+@keyframes atmo-diya {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-2deg);
+  }
+  50% {
+    transform: translate3d(var(--a-drift), -10px, 0) rotate(2deg);
+  }
+}
+
+@keyframes atmo-flame {
+  0%,
+  100% {
+    transform: translateX(-50%) scaleY(1) scaleX(1);
+    opacity: 0.92;
+  }
+  35% {
+    transform: translateX(-50%) scaleY(1.18) scaleX(0.92);
+    opacity: 1;
+  }
+  70% {
+    transform: translateX(-50%) scaleY(0.9) scaleX(1.06);
+    opacity: 0.85;
+  }
+}
+
+@keyframes atmo-ripple {
+  0%,
+  100% {
+    transform: scaleX(0.35) translateY(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scaleX(1) translateY(1px);
+    opacity: var(--a-opacity);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   3 · SONG THUMBNAIL  (16:9 · cover · shimmer · Chhath fallback)
+   ───────────────────────────────────────────────────────────── */
+
+.songthumb {
+  position: relative;
+  display: block;
+  /* exact 16:9 box reserved up front — zero layout shift */
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(245, 158, 11, 0.04)),
+    var(--surface-2, #121a2e);
+  box-shadow: 0 6px 20px -10px rgba(0, 0, 0, 0.7);
+  isolation: isolate;
+}
+
+/* shimmer skeleton while the image decodes */
+.songthumb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.02) 20%,
+    rgba(212, 175, 55, 0.11) 50%,
+    rgba(255, 255, 255, 0.02) 80%
+  );
+  background-size: 220% 100%;
+  animation: songthumb-shimmer 1.5s ease-in-out infinite;
+  transition: opacity var(--dur) var(--ease);
+}
+
+.songthumb.is-loaded::before {
+  opacity: 0;
+  animation: none;
+}
+
+.songthumb__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.5s var(--ease), transform 0.6s var(--ease);
+}
+
+.songthumb.is-loaded .songthumb__img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* attractive Chhath-themed fallback when YouTube serves nothing */
+.songthumb__fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--gold-400);
+  background:
+    radial-gradient(120% 90% at 50% 8%, rgba(245, 158, 11, 0.22) 0%, transparent 60%),
+    linear-gradient(160deg, #17203a 0%, #0b1020 70%);
+}
+
+.songthumb__fallback::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -46%;
+  width: 150%;
+  height: 92%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, transparent 68%);
+}
+
+@keyframes songthumb-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   4 · HERO — sunrise cinema
+   ───────────────────────────────────────────────────────────── */
+
+/* the sunrise itself: a low sun disc + breathing halo */
+.hero__sunrise {
+  position: absolute;
+  left: 50%;
+  bottom: -18vh;
+  width: min(120vh, 130vw);
+  height: min(120vh, 130vw);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: -1;
+  background: radial-gradient(
+    circle at 50% 62%,
+    rgba(255, 236, 176, 0.5) 0%,
+    rgba(245, 158, 11, 0.34) 16%,
+    rgba(212, 175, 55, 0.16) 34%,
+    transparent 62%
+  );
+  animation: sunrise-breathe 11s var(--ease-in-out) infinite;
+}
+
+/* slow rotating light shafts */
+.hero__rays {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 78%,
+    rgba(255, 226, 150, 0.11) 0deg 2.2deg,
+    transparent 2.2deg 9deg
+  );
+  mix-blend-mode: screen;
+  transform-origin: 50% 78%;
+  animation: rays-turn 150s linear infinite;
+}
+
+@keyframes sunrise-breathe {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.045);
+  }
+}
+
+@keyframes rays-turn {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* subtle parallax on the hero artwork — driven by a CSS variable
+   so the JS only ever writes one property. */
+.hero__art img {
+  transform: translate3d(0, var(--hero-parallax, 0px), 0) scale(1.08);
+  will-change: transform;
+}
+
+/* heading: fade-up + blur-to-clear, staggered */
+.hero__inner > * {
+  animation: hero-enter 1.05s var(--ease) backwards;
+}
+.hero__greet {
+  animation-delay: 0.05s;
+}
+.hero__kicker {
+  animation-delay: 0.14s;
+}
+.hero__title {
+  animation-delay: 0.24s;
+}
+.hero__quote {
+  animation-delay: 0.38s;
+}
+.hero__en {
+  animation-delay: 0.48s;
+}
+.hero__cta {
+  animation-delay: 0.58s;
+}
+.hero__stats {
+  animation-delay: 0.7s;
+}
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+    filter: blur(9px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* CTA: golden glow + smooth press */
+.hero__cta .btn {
+  position: relative;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    filter var(--dur) var(--ease);
+}
+
+.hero__cta .btn--primary {
+  box-shadow: 0 10px 30px -12px rgba(212, 175, 55, 0.7), 0 0 0 1px rgba(212, 175, 55, 0.28);
+}
+
+.hero__cta .btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(60% 120% at 50% 50%, rgba(212, 175, 55, 0.4), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.hero__cta .btn:hover {
+  transform: translateY(-2px);
+}
+
+.hero__cta .btn--primary:hover {
+  box-shadow: 0 16px 40px -12px rgba(212, 175, 55, 0.85), 0 0 0 1px rgba(212, 175, 55, 0.45);
+}
+
+.hero__cta .btn--primary:hover::after {
+  opacity: 1;
+}
+
+.hero__cta .btn:active {
+  transform: translateY(0) scale(0.975);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   5 · CARD ANIMATIONS
+   ───────────────────────────────────────────────────────────── */
+
+/* lift on hover — transform + shadow only */
+.song-card,
+.day-card,
+.playlist-card,
+.artist-card,
+.gallery-card {
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .song-card:hover,
+  .playlist-card:hover,
+  .artist-card:hover,
+  .gallery-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 22px 44px -22px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(212, 175, 55, 0.16);
+  }
+
+  .day-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 26px 50px -24px rgba(0, 0, 0, 0.85);
+  }
+}
+
+/* thumbnail very subtle zoom */
+.song-card .songthumb__img,
+.playlist-card .songthumb__img,
+.gallery-card .songthumb__img {
+  transition: opacity 0.5s var(--ease), transform 0.7s var(--ease);
+}
+
+@media (hover: hover) {
+  .song-card:hover .songthumb__img,
+  .playlist-card:hover .songthumb__img,
+  .gallery-card:hover .songthumb__img {
+    transform: scale(1.055);
+  }
+}
+
+/* dark overlay + premium play icon on hover/tap */
+.song-card__scrim {
+  transition: opacity var(--dur) var(--ease);
+}
+
+.song-card .play-fab {
+  transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .song-card:hover .play-fab {
+    transform: scale(1.08);
+    box-shadow: 0 10px 26px -8px rgba(212, 175, 55, 0.75);
+  }
+}
+
+.song-card .play-fab:active {
+  transform: scale(0.92);
+}
+
+/* currently playing: golden border + gentle breathing glow */
+.song-card.is-current {
+  border-color: rgba(212, 175, 55, 0.55);
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.35), 0 18px 40px -22px rgba(212, 175, 55, 0.5);
+  animation: current-breathe 4.5s var(--ease-in-out) infinite;
+}
+
+@keyframes current-breathe {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.28), 0 16px 36px -24px rgba(212, 175, 55, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5), 0 20px 46px -20px rgba(212, 175, 55, 0.6);
+  }
+}
+
+/* song rows (library / playlist lists) */
+.song-row {
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+
+.song-row.is-current {
+  background: linear-gradient(90deg, rgba(212, 175, 55, 0.14), rgba(212, 175, 55, 0.03));
+}
+
+/* ─────────────────────────────────────────────────────────────
+   6 · FESTIVAL DAY CARDS — four identities
+   ───────────────────────────────────────────────────────────── */
+
+.day-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* each day gets its own quiet wash of colour and its own motif */
+.day-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.9;
+  transition: opacity var(--dur) var(--ease);
+}
+
+/* 1 · Nahay Khay — river water, dawn */
+.day-card[data-day='1']::before {
+  background: radial-gradient(120% 80% at 50% 108%, rgba(56, 132, 168, 0.22) 0%, transparent 62%);
+}
+/* 2 · Kharna — the hearth, diya + kalash */
+.day-card[data-day='2']::before {
+  background: radial-gradient(110% 75% at 78% 6%, rgba(245, 158, 11, 0.2) 0%, transparent 60%);
+}
+/* 3 · Sandhya Arghya — the setting sun */
+.day-card[data-day='3']::before {
+  background: radial-gradient(120% 85% at 50% 104%, rgba(224, 138, 43, 0.28) 0%, transparent 64%);
+}
+/* 4 · Usha Arghya — the rising sun */
+.day-card[data-day='4']::before {
+  background: radial-gradient(120% 85% at 50% 104%, rgba(255, 232, 168, 0.26) 0%, transparent 64%);
+}
+
+@media (hover: hover) {
+  .day-card:hover::before {
+    opacity: 1;
+  }
+}
+
+/* the day's emblem gets a slow, respectful float */
+.day-card__icon {
+  display: inline-grid;
+  place-items: center;
+  animation: day-emblem 7s var(--ease-in-out) infinite;
+}
+
+@keyframes day-emblem {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(1.5deg);
+  }
+}
+
+/* a thin sunrise/sunset band across the bottom of each card */
+.day-card::after {
+  content: '';
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  bottom: -55%;
+  height: 80%;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(60% 100% at 50% 100%, var(--day-glow, rgba(212, 175, 55, 0.22)) 0%, transparent 70%);
+  animation: day-glow 9s var(--ease-in-out) infinite;
+}
+
+.day-card[data-day='1'] {
+  --day-glow: rgba(86, 156, 194, 0.24);
+}
+.day-card[data-day='2'] {
+  --day-glow: rgba(245, 158, 11, 0.26);
+}
+.day-card[data-day='3'] {
+  --day-glow: rgba(224, 108, 43, 0.28);
+}
+.day-card[data-day='4'] {
+  --day-glow: rgba(255, 226, 160, 0.3);
+}
+
+@keyframes day-glow {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   7 · NAVBAR — clean → premium glass on scroll
+   ───────────────────────────────────────────────────────────── */
+
+.nav {
+  transition: background var(--dur) var(--ease), backdrop-filter var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+
+.nav.is-stuck {
+  background: rgba(8, 12, 24, 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border-bottom-color: rgba(212, 175, 55, 0.22);
+  box-shadow: 0 10px 34px -20px rgba(0, 0, 0, 0.9);
+}
+
+/* smooth golden underline that grows from the centre */
+.nav__link {
+  position: relative;
+}
+
+.nav__link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--saffron-500), var(--gold-300));
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+  transform: translateX(-50%);
+  transition: width var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  opacity: 0;
+}
+
+.nav__link:hover::after,
+.nav__link.is-active::after {
+  width: 58%;
+  opacity: 1;
+}
+
+.nav__link.is-active {
+  color: var(--gold-300);
+  text-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   8 · MICRO INTERACTIONS
+   ───────────────────────────────────────────────────────────── */
+
+/* buttons anywhere in the app */
+.btn {
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease),
+    background var(--dur) var(--ease), color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.975);
+}
+
+/* icons inside controls lift slightly on hover */
+.icon-btn svg,
+.play-fab svg {
+  transition: transform var(--dur) var(--ease);
+}
+
+@media (hover: hover) {
+  .icon-btn:hover svg {
+    transform: scale(1.12);
+  }
+}
+
+.icon-btn:active svg {
+  transform: scale(0.9);
+}
+
+/* filter chips / tabs */
+.chip,
+.filter-chip,
+.mood-chip {
+  transition: background var(--dur) var(--ease), color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease), transform var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.chip.is-active,
+.filter-chip.is-active,
+.mood-chip.is-active {
+  box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.4), 0 8px 22px -12px rgba(212, 175, 55, 0.6);
+}
+
+/* search results appear softly as you type */
+.song-row,
+.song-card {
+  animation: result-in 0.36s var(--ease) backwards;
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* mobile tap feedback — no :hover on touch, so use :active */
+@media (hover: none) {
+  .song-card:active,
+  .day-card:active,
+  .playlist-card:active,
+  .artist-card:active {
+    transform: scale(0.985);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   9 · GLOBAL DEVOTIONAL BACKGROUND
+   ───────────────────────────────────────────────────────────── */
+
+.app-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0.55;
+}
+
+.app-atmosphere .atmo--bokeh .atmo__i {
+  filter: blur(26px);
+}
+
+/* keep every page section above the ambient layer */
+.page,
+main,
+.app-main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   10 · PERFORMANCE & ACCESSIBILITY GUARDS
+   ───────────────────────────────────────────────────────────── */
+
+/* Kill every decorative animation for people who ask for less motion.
+   Content is simply shown in its final state — nothing is hidden. */
+@media (prefers-reduced-motion: reduce) {
+  .atmo,
+  .app-atmosphere {
+    display: none !important;
+  }
+
+  .hero__sunrise,
+  .hero__rays,
+  .hero__inner > *,
+  .song-card.is-current,
+  .day-card__icon,
+  .day-card::after,
+  .song-row,
+  .song-card,
+  .songthumb::before,
+  .songthumb__img {
+    animation: none !important;
+  }
+
+  .reveal,
+  .reveal--rise,
+  .reveal--fade,
+  .reveal--blur,
+  .reveal--scale {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .hero__art img {
+    transform: scale(1.02) !important;
+  }
+
+  /* keep the useful feedback, drop the movement */
+  .btn:hover,
+  .song-card:hover,
+  .day-card:hover,
+  .playlist-card:hover {
+    transform: none;
+  }
+}
+
+/* Low-end phones: trim the expensive blur and the biggest layers.
+   `update: slow` catches budget Android devices. */
+@media (max-width: 720px) {
+  .atmo--bokeh .atmo__i {
+    filter: blur(14px);
+  }
+  .hero__sunrise {
+    animation-duration: 16s;
+  }
+}
+
+@media (update: slow) {
+  .atmo--bokeh,
+  .app-atmosphere {
+    display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   11 · INTEGRATION HOOKS
+   Places where the new thumbnail has to blend into a box that
+   the existing design already reserves for it.
+   ───────────────────────────────────────────────────────────── */
+
+/* the host already sets the aspect ratio — the thumb simply fills it */
+.song-card__art .songthumb,
+.song-row__art .songthumb,
+.playlist-card__art .songthumb,
+.gallery-card__art .songthumb,
+.expanded__art .songthumb {
+  aspect-ratio: auto;
+  height: 100%;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* card artwork keeps its own rounded corners via the card itself */
+.song-card__art .songthumb,
+.playlist-card__art .songthumb {
+  border-radius: var(--r-md);
+}
+
+/* ghat water strip along the bottom of the hero */
+/* z-index 0 keeps the water over the scrim but under .hero__inner
+   (which is positioned with z-index auto and comes later) */
+.hero__water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(20, 46, 68, 0.16) 55%,
+    rgba(10, 26, 44, 0.32) 100%
+  );
+}
+
+/* the day cards host their own ambience, so it must sit behind
+   the text but above the card background */
+.day-card > .atmo {
+  z-index: -1;
+}
+
+/* ── reveal used as a grid/flex child ───────────────────────────
+   `Reveal` renders a real element, so it inherits the grid cell it
+   is placed in. Nothing extra is needed, but keep it from
+   collapsing when it wraps a single card. */
+.grid > .reveal,
+.stack > .reveal {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── respect the sticky chrome ──────────────────────────────────
+   The ambient background is fixed and must never sit above the
+   player, the nav or any dialog. */
+.app-atmosphere {
+  z-index: 0;
+}

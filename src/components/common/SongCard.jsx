@@ -1,9 +1,8 @@
 import { memo, useCallback, useState } from 'react';
 import Icon from '../Icon';
-import LazyImage from './LazyImage';
+import SongThumb from './SongThumb';
 import SongMenu from './SongMenu';
 import { usePlayer, usePlayerActions } from '../../context/PlayerContext';
-import { thumb } from '../../data/songs';
 import { fmtTime } from '../../lib/format';
 
 /**
@@ -39,40 +38,39 @@ function SongCard({ song, queue, showEq = true }) {
   return (
     <article className={`song-card ${isCurrent ? 'is-current' : ''}`}>
       <div className="song-card__art">
-        <LazyImage
-          src={thumb(song)}
-          alt={`${song.title} — ${song.artist}`}
-          loading="lazy"
-        />
-        <div className="song-card__scrim" />
-        <span className="song-card__duration">{fmtTime(song.seconds)}</span>
+        {/* Thumbnail is derived from the song's YouTube id — maxres
+            first, hqdefault if that is missing, painted fallback last. */}
+        <SongThumb song={song} alt={`${song.title} — ${song.artist}`}>
+          <div className="song-card__scrim" />
+          <span className="song-card__duration">{fmtTime(song.seconds)}</span>
 
-        <button
-          className="play-fab song-card__play"
-          onClick={onPlay}
-          aria-label={isCurrent && isPlaying ? `Pause ${song.title}` : `Play ${song.title}`}
-        >
-          <Icon
-            name={isCurrent && isPlaying ? 'pause' : 'play'}
-            size={20}
-            filled
-            strokeWidth={0}
-            style={{ transform: 'translateX(1px)' }}
-          />
-        </button>
-
-        {showEq && isCurrent && (
-          <span
-            aria-hidden="true"
-            style={{ position: 'absolute', top: 10, left: 10 }}
+          <button
+            className="play-fab song-card__play"
+            onClick={onPlay}
+            aria-label={isCurrent && isPlaying ? `Pause ${song.title}` : `Play ${song.title}`}
           >
-            <span className={`eq ${isPlaying ? '' : 'is-paused'}`}>
-              <span />
-              <span />
-              <span />
+            <Icon
+              name={isCurrent && isPlaying ? 'pause' : 'play'}
+              size={20}
+              filled
+              strokeWidth={0}
+              style={{ transform: 'translateX(1px)' }}
+            />
+          </button>
+
+          {showEq && isCurrent && (
+            <span
+              aria-hidden="true"
+              style={{ position: 'absolute', top: 10, left: 10 }}
+            >
+              <span className={`eq ${isPlaying ? '' : 'is-paused'}`}>
+                <span />
+                <span />
+                <span />
+              </span>
             </span>
-          </span>
-        )}
+          )}
+        </SongThumb>
       </div>
 
       <div className="song-card__body">

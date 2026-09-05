@@ -12,6 +12,7 @@ import './styles/base.css';
 import './styles/components.css';
 import './styles/player.css';
 import './styles/premium.css';
+import './styles/cinematic.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

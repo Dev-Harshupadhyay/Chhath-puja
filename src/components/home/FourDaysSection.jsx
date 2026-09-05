@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import Icon from '../Icon';
 import SectionHeading from '../common/SectionHeading';
+import Reveal from '../common/Reveal';
+import Atmosphere from '../ambient/Atmosphere';
 import { days } from '../../data/days';
 import { festivalDays } from '../../lib/festival';
 import { songs } from '../../data/songs';
@@ -24,11 +26,21 @@ export default function FourDaysSection() {
         />
 
         <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))' }}>
-          {days.map((d) => {
+          {days.map((d, i) => {
             const info = dateByKey.get(d.key);
             const daySongs = songs.filter((s) => s.day === d.key);
             return (
-              <article key={d.key} className="day-card">
+              /* data-day drives each day's own colour wash in CSS:
+                 1 water · 2 hearth · 3 sunset · 4 sunrise */
+              <Reveal
+                as="article"
+                key={d.key}
+                className="day-card"
+                variant="rise"
+                index={i}
+                data-day={d.day}
+              >
+                <Atmosphere variant="particles" count={7} seed={40 + i * 13} />
                 <span className="day-card__no" aria-hidden="true">
                   {d.day}
                 </span>
@@ -50,7 +62,7 @@ export default function FourDaysSection() {
                     <Icon name="play" size={14} /> इस दिन के गीत सुनें ({daySongs.length})
                   </Link>
                 </div>
-              </article>
+              </Reveal>
             );
           })}
         </div>

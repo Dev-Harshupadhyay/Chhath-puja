@@ -9,6 +9,7 @@ import ExpandedPlayer from '../player/ExpandedPlayer';
 import Lightbox from '../common/Lightbox';
 import NameGate from '../common/NameGate';
 import DeveloperProfile from '../developer/DeveloperProfile';
+import Atmosphere from '../ambient/Atmosphere';
 import { usePlayer } from '../../context/PlayerContext';
 
 export default function Layout() {
@@ -33,6 +34,13 @@ export default function Layout() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+
+      {/* Ambient devotional background — fixed, non-interactive,
+          and the first thing reduced-motion switches off. */}
+      <div className="app-atmosphere" aria-hidden="true">
+        <Atmosphere variant="bokeh" count={7} seed={21} />
+        <Atmosphere variant="particles" count={18} seed={5} />
+      </div>
 
       <Navbar />
 
